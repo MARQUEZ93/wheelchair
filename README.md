@@ -1,9 +1,12 @@
 # The Wheelchair Movement
 
-## Compatible Devices
+## Compatible Devices (Since API Level 4.2.3)
 
-1) Garmin Forerunner 255m 
-2) Garmin Forerunner 255
+Per Garmin documentation, only three devices support Wheelchair push count:
+
+1) Venu® 3
+2) Venu® 3S
+3) vívoactive® 5
 
 <!-- <p align="center"><img src="https://i.imgur.com/NadKoiL.jpg" width="200px" /></p> -->
 
