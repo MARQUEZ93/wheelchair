@@ -4,5 +4,4 @@
     <bitmap id="connected" filename="icons/bt-conn.png"/>
     <bitmap id="heart" filename="icons/new_heart.png"/>
     <bitmap id="pushes" filename="icons/wheelchair.png"/>
-    <bitmap id="purple" filename="dall4.png"/>
 </drawables>

@@ -52,38 +52,46 @@ class WheelchairMovementView extends WatchUi.WatchFace {
         dc.setBlendMode(Graphics.BLEND_MODE_SOURCE); // Ensure there's no blending while drawing the background
         dc.drawBitmap(0, 0, backgroundImage);
         
-         // Set the color
-        // dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_WHITE);
-        dc.setPenWidth(10);
-        // Declare coordinates and dimensions
-        
-        var timeX = 160;  // Center X of the text
-        var timeY = 125;  // Center Y of the text
-        
-        timeString = "12:34AM";  // Your time string
+        timeString = "12:34";  // Your time string
 
         // Create or load a custom font if necessary
         var font = copperFont;  // For example
-        // var font = Ui.loadResource(Rez.Fonts.CustomFont);  // Assuming a custom font is loaded
 
         dc.drawBitmap(0, 0, backgroundImage);
 
-        // Create and draw the clipping mask
+        var d = 75; // Adjust this value to increase/decrease the distance between characters
+        var theta = 10 * (Math.PI / 180); 
+        var dx = Math.round(d * Math.cos(theta));
+        var dy = Math.round(d * Math.sin(theta));
+
+        var startX = screenWidth / 5;
+        var startY = screenHeight / 3;
+
+        var ascCoords = [];
+
+        // Calculate ascCoords
+        for (var i = 0; i < timeString.length(); i++) {
+            ascCoords.add([startX + i * dx, startY - i * dy]);
+        }
+
         dc.setColor(Graphics.COLOR_LT_GRAY, Graphics.COLOR_TRANSPARENT);
-        dc.drawText(timeX, timeY, font, timeString, Graphics.TEXT_JUSTIFY_CENTER);
+
+        var j = 0;
+        for (var i = 0; i < timeString.length(); i++) {
+            var char = timeString.substring(i, i + 1);
+            dc.drawText(ascCoords[j][0], ascCoords[j][1], font, char, Graphics.TEXT_JUSTIFY_CENTER);
+            j++;
+        }
         drawRing(dc);
     }
 
-     private function drawRing(dc) {
+    private function drawRing(dc) {
         var centerX = screenWidth / 2;
         var centerY = screenHeight / 2;
         var radius = screenWidth / 2;
         var startAngle = 0;
         var endAngle = 360;
         var attr = Graphics.ARC_COUNTER_CLOCKWISE;
-
-        dc.setColor(Graphics.COLOR_LT_GRAY, Graphics.COLOR_TRANSPARENT);
-        dc.setPenWidth(10); // Adjust the thickness of the ring
         dc.drawArc(centerX, centerY, radius, attr, startAngle, endAngle);
     }
 

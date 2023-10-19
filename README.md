@@ -1,4 +1,4 @@
-# The Wheelchair Movement
+# A Wheelchair Watchface for Garmin Devices
 
 ## Compatible Devices (Since API Level 4.2.3)
 
@@ -36,10 +36,6 @@ My goal is for one download & one positive review :)
 ## Credits
 
 - [Kai Hao](https://kaihao.dev/posts/Develop-a-Garmin-watch-face)
-
-## Design
-
-I used the existing [Movement](https://apps.garmin.com/en-US/apps/1653693f-7231-46ef-8951-04d51e58b6d6) design as a template
 
 ## Contact
 
