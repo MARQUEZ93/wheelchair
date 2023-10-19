@@ -2,7 +2,7 @@ import Toybox.Application;
 import Toybox.Lang;
 import Toybox.WatchUi;
 
-class WheelchairMovementApp extends Application.AppBase {
+class WheelchairApp extends Application.AppBase {
 
     function initialize() {
         AppBase.initialize();
@@ -18,11 +18,11 @@ class WheelchairMovementApp extends Application.AppBase {
 
     // Return the initial view of your application here
     function getInitialView() as Array<Views or InputDelegates>? {
-        return [ new WheelchairMovementView() ] as Array<Views or InputDelegates>;
+        return [ new WheelchairView() ] as Array<Views or InputDelegates>;
     }
 
 }
 
-function getApp() as WheelchairMovementApp {
-    return Application.getApp() as WheelchairMovementApp;
+function getApp() as WheelchairApp {
+    return Application.getApp() as WheelchairApp;
 }

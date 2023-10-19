@@ -5,7 +5,7 @@ import Toybox.WatchUi;
 
 using DataProvider;
 
-class WheelchairMovementView extends WatchUi.WatchFace {
+class WheelchairView extends WatchUi.WatchFace {
 
     private var screenWidth;
     private var screenHeight;
