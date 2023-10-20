@@ -2,11 +2,11 @@ import Toybox.Graphics;
 import Toybox.Lang;
 import Toybox.System;
 import Toybox.WatchUi;
-using Toybox.Activity;
-using Toybox.ActivityMonitor;
+import Toybox.Activity;
+import Toybox.ActivityMonitor;
 using Toybox.Time.Gregorian as Date;
 
-using DataProvider;
+import DataProvider;
 
 class WheelchairView extends WatchUi.WatchFace {
     private var screenWidth;
@@ -21,8 +21,15 @@ class WheelchairView extends WatchUi.WatchFace {
     private var snowyImage;
     private var cloudyImage;
     private var thunderImage;
+    // per device
+    private var deviceInfo;
+    private var model;
     function initialize() {
         WatchFace.initialize();
+        deviceInfo = System.getDeviceSettings();
+        var a = 2;
+        // 390*390 for vivoactive
+        // 454*454 venu3
     }
     // Load your resources here
     function onLayout(dc as Dc) as Void {
@@ -153,7 +160,7 @@ class WheelchairView extends WatchUi.WatchFace {
         dc.setColor(Graphics.COLOR_LT_GRAY, Graphics.COLOR_TRANSPARENT);
         dc.drawText(
             screenWidth / 2,
-            45,
+            55,
             Graphics.FONT_SMALL,
             dateString,
             Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
@@ -225,12 +232,12 @@ class WheelchairView extends WatchUi.WatchFace {
     private function drawRing(dc) {
         var centerX = screenWidth / 2;
         var centerY = screenHeight / 2;
-        var radius = screenWidth / 2 - 5; // 5 pixels from the edge
+        var radius = screenWidth / 2;
         var startAngle = 0;
         var endAngle = 360;
         var attr = Graphics.ARC_COUNTER_CLOCKWISE;
         dc.setColor(Graphics.COLOR_PURPLE, Graphics.COLOR_TRANSPARENT);
-        dc.setPenWidth(7); // Adjust the thickness of the ring
+        dc.setPenWidth(16); // Adjust the thickness of the ring
         dc.drawArc(centerX, centerY, radius, attr, startAngle, endAngle);
     }
      private function drawTemperature(dc) {
