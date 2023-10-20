@@ -21,15 +21,29 @@ class WheelchairView extends WatchUi.WatchFace {
     private var snowyImage;
     private var cloudyImage;
     private var thunderImage;
-    // per device
-    private var deviceInfo;
-    private var model;
+    private var offsets;
     function initialize() {
         WatchFace.initialize();
-        deviceInfo = System.getDeviceSettings();
-        var a = 2;
-        // 390*390 for vivoactive
-        // 454*454 venu3
+        var deviceInfo = System.getDeviceSettings();
+        // 390*390 for vivoactive + venu3s
+        if ( deviceInfo.screenWidth == 455 ){
+            offsets = {
+                "temperatureX" => 105,
+                "forecastX" => 50,
+                "bluetooth" => 0,
+                "pushesX" => 0,
+                "weather" => 0
+            };
+        } else {
+            // 454*454 for venu3
+            offsets = {
+                "temperatureX" => 105,
+                "forecastX" => 50,
+                "bluetooth" => 0,
+                "temperature" => 0,
+                "weather" => 0
+            };
+        }
     }
     // Load your resources here
     function onLayout(dc as Dc) as Void {
@@ -160,7 +174,7 @@ class WheelchairView extends WatchUi.WatchFace {
         dc.setColor(Graphics.COLOR_LT_GRAY, Graphics.COLOR_TRANSPARENT);
         dc.drawText(
             screenWidth / 2,
-            55,
+            60,
             Graphics.FONT_SMALL,
             dateString,
             Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
@@ -252,22 +266,20 @@ class WheelchairView extends WatchUi.WatchFace {
         var angle_deg = 155; // 10:30 in degrees
         var angle_rad = angle_deg * (Math.PI / 180);
         var radius = screenWidth / 2;
-        var x = screenWidth / 2 + radius * Math.cos(angle_rad);
+        var x = screenWidth / 2 + radius * Math.cos(angle_rad) + offsets["temperatureX"];
         var y = screenHeight / 2 - radius * Math.sin(angle_rad);
         dc.setColor(Graphics.COLOR_LT_GRAY, Graphics.COLOR_TRANSPARENT);
         // Draw the degree symbol, with a manual offset
         dc.drawText(
             x,
-            y - 5,
+            y,
             Graphics.FONT_SMALL,
             tempString,
             Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
         );
-        var xOffsetDegree = 12;
-        var yOffsetDegree = -5;
         dc.drawText(
-            x + xOffsetDegree + tempOffset,
-            y + yOffsetDegree,
+            x + tempOffset + 20,
+            y,
             Graphics.FONT_SMALL,
             degreeSymbol,
             Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER
@@ -329,7 +341,7 @@ class WheelchairView extends WatchUi.WatchFace {
         var angle_deg = 155;
         var angle_rad = angle_deg * (Math.PI / 180);
         var radius = screenWidth / 2;
-        var x = screenWidth / 2 + radius * Math.cos(angle_rad); // Adjusted x-coordinate
+        var x = screenWidth / 2 + radius * Math.cos(angle_rad) + offsets["forecastX"]; 
         var y = screenHeight / 2 - radius * Math.sin(angle_rad);
         dc.drawBitmap(
             x,
