@@ -21,7 +21,6 @@ module DataProvider {
         }
         return heartRate;
     }
-
     function getPushes() {
         var info = ActivityMonitor.getInfo();
         var pushes = 0;
@@ -30,21 +29,36 @@ module DataProvider {
         }
         return pushes;
     }
-
     function getBatteryLevel() {
         return System.getSystemStats().battery;
     }
-
     function getBluetoothStatus() {
         var deviceSettings = System.getDeviceSettings();
         return deviceSettings.connectionInfo[:bluetooth].state;
     }
-
     function getCurrentTime() {
         return System.getClockTime();
     }
-
     function getCurrentDate() {
         return Date.info(Time.now(), Time.FORMAT_MEDIUM);
+    }
+    function getTemperature() {
+        var conditions = Weather.getCurrentConditions();
+        if (conditions != null) {
+            var tempCelsius = conditions.temperature;
+            if (tempCelsius == null) {
+                return null;
+            }
+            var tempFahrenheit = (tempCelsius * 9/5) + 32;
+            return tempFahrenheit;
+        }
+        return null; 
+    }
+    function getForecast() {
+        var conditions = Weather.getCurrentConditions();
+        if (conditions != null) {
+            return conditions.condition;
+        }
+        return null; 
     }
 }
