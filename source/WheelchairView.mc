@@ -21,14 +21,14 @@ class WheelchairView extends WatchUi.WatchFace {
     private var snowyImage;
     private var cloudyImage;
     private var thunderImage;
-    private var offsets;
+    private var config;
+
     function initialize() {
         WatchFace.initialize();
         var deviceInfo = System.getDeviceSettings();
         // 390*390 for vivoactive + venu3s
         if ( deviceInfo.screenWidth == 455 ){
-            offsets = {
-                "temperatureX" => 105,
+            config = {
                 "forecastX" => 50,
                 "bluetooth" => 0,
                 "pushesX" => 0,
@@ -36,8 +36,7 @@ class WheelchairView extends WatchUi.WatchFace {
             };
         } else {
             // 454*454 for venu3
-            offsets = {
-                "temperatureX" => 105,
+            config = {
                 "forecastX" => 50,
                 "bluetooth" => 0,
                 "temperature" => 0,
@@ -45,6 +44,7 @@ class WheelchairView extends WatchUi.WatchFace {
             };
         }
     }
+
     // Load your resources here
     function onLayout(dc as Dc) as Void {
         setLayout(Rez.Layouts.WatchFace(dc));
@@ -70,11 +70,11 @@ class WheelchairView extends WatchUi.WatchFace {
         View.onUpdate(dc);
         // Draw the UI
         drawRing(dc);
+        drawHeartRate(dc, heartImage);
+        drawPushes(dc);
         drawHoursMinutes(dc);
         drawDate(dc);
-        drawHeartRateText(dc);
         drawBatteryBluetooth(dc);
-        drawPushes(dc);
         drawTemperature(dc);
         drawWeather(dc);
     }
@@ -86,9 +86,20 @@ class WheelchairView extends WatchUi.WatchFace {
     function onExitSleep() as Void {}
     // Terminate any active timers and prepare for slow updates.
     function onEnterSleep() as Void {}
-    private function drawHeartRateText(dc) {
-        var heartWidth = heartImage.getWidth();
-        var angle_deg = 195; // 8:30 PM on the clock in degrees
+    private function drawRing(dc) {
+        var centerX = screenWidth / 2;
+        var centerY = screenHeight / 2;
+        var radius = screenWidth / 2;
+        var startAngle = 0;
+        var endAngle = 360;
+        var attr = Graphics.ARC_COUNTER_CLOCKWISE;
+        dc.setColor(Graphics.COLOR_PURPLE, Graphics.COLOR_TRANSPARENT);
+        dc.setPenWidth(16); // Adjust the thickness of the ring
+        dc.drawArc(centerX, centerY, radius, attr, startAngle, endAngle);
+    }
+    private function drawHeartRate(dc, image) {
+        var imageWidth = image.getWidth();
+        var angle_deg = 225; // 7:30 PM on the clock in degrees
         var angle_rad = angle_deg * (Math.PI / 180);
         var radius = screenWidth / 2;
         var heartX = screenWidth / 2 + radius * Math.cos(angle_rad);
@@ -98,7 +109,7 @@ class WheelchairView extends WatchUi.WatchFace {
             (heartRate != null && heartRate > 120) ? Graphics.COLOR_DK_RED : Graphics.COLOR_LT_GRAY,
             Graphics.COLOR_TRANSPARENT
         );
-        var x = heartX + heartWidth;
+        var x = heartX + imageWidth;
         var y = heartY + 20;
         var heartTextOffset = -5;
         if (heartRate != null && heartRate >= 100) {
@@ -243,17 +254,6 @@ class WheelchairView extends WatchUi.WatchFace {
             bluetoothImg
         );
     }
-    private function drawRing(dc) {
-        var centerX = screenWidth / 2;
-        var centerY = screenHeight / 2;
-        var radius = screenWidth / 2;
-        var startAngle = 0;
-        var endAngle = 360;
-        var attr = Graphics.ARC_COUNTER_CLOCKWISE;
-        dc.setColor(Graphics.COLOR_PURPLE, Graphics.COLOR_TRANSPARENT);
-        dc.setPenWidth(16); // Adjust the thickness of the ring
-        dc.drawArc(centerX, centerY, radius, attr, startAngle, endAngle);
-    }
      private function drawTemperature(dc) {
         var tempOffset = 0;
         var temperature = DataProvider.getTemperature();
@@ -262,23 +262,22 @@ class WheelchairView extends WatchUi.WatchFace {
         }
         var tempString = (temperature == null) ? "N/A" : temperature.format("%d");
         var degreeSymbol = (temperature == null) ? "" : "°";
-        // Position at 10:30 on the clock
         var angle_deg = 155; // 10:30 in degrees
         var angle_rad = angle_deg * (Math.PI / 180);
         var radius = screenWidth / 2;
-        var x = screenWidth / 2 + radius * Math.cos(angle_rad) + offsets["temperatureX"];
+        var x = screenWidth / 2 + radius * Math.cos(angle_rad) + 105;
         var y = screenHeight / 2 - radius * Math.sin(angle_rad);
         dc.setColor(Graphics.COLOR_LT_GRAY, Graphics.COLOR_TRANSPARENT);
         // Draw the degree symbol, with a manual offset
         dc.drawText(
-            x,
+            x+10,
             y,
             Graphics.FONT_SMALL,
             tempString,
             Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
         );
         dc.drawText(
-            x + tempOffset + 20,
+            x + tempOffset + 30,
             y,
             Graphics.FONT_SMALL,
             degreeSymbol,
@@ -341,7 +340,7 @@ class WheelchairView extends WatchUi.WatchFace {
         var angle_deg = 155;
         var angle_rad = angle_deg * (Math.PI / 180);
         var radius = screenWidth / 2;
-        var x = screenWidth / 2 + radius * Math.cos(angle_rad) + offsets["forecastX"]; 
+        var x = screenWidth / 2 + radius * Math.cos(angle_rad) + config["forecastX"]; 
         var y = screenHeight / 2 - radius * Math.sin(angle_rad);
         dc.drawBitmap(
             x,
