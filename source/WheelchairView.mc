@@ -53,10 +53,10 @@ class WheelchairView extends WatchUi.WatchFace {
         pushesImage = Application.loadResource(Rez.Drawables.pushes);
         disconnectedImage = Application.loadResource(Rez.Drawables.disconnected);
         connectedImage = Application.loadResource(Rez.Drawables.connected);
-        heartImage = Application.loadResource(Rez.Drawables.heart32);
+        heartImage = Application.loadResource(Rez.Drawables.heart);
         sunnyImage = Application.loadResource(Rez.Drawables.sunny);
-        rainyImage = Application.loadResource(Rez.Drawables.rainy);
-        snowyImage = Application.loadResource(Rez.Drawables.snowy);
+        rainyImage = Application.loadResource(Rez.Drawables.rain);
+        snowyImage = Application.loadResource(Rez.Drawables.snow);
         cloudyImage = Application.loadResource(Rez.Drawables.cloudy);
         thunderImage = Application.loadResource(Rez.Drawables.thunder);
     }
@@ -191,14 +191,14 @@ class WheelchairView extends WatchUi.WatchFace {
         // Check if connected
         var isConnected = (bluetoothState == 2); // Or use the appropriate enum if available
         var bluetoothImg = isConnected ? connectedImage : disconnectedImage; 
-        var height = 12;
-        var width = 24;
+        var height = 24;
+        var width = 48;
         // Coordinates for 2PM
         var angle_deg = 60; // 2 PM on the clock in degrees
         var angle_rad = angle_deg * (Math.PI / 180);
         var radius = screenWidth / 4;
-        var x = screenWidth / 2 + radius * Math.cos(angle_rad) - 36 + add100EdgeCase;
-        var y = screenHeight / 2 - radius * Math.sin(angle_rad) + 10; // Note the '-' because of the coordinate system
+        var x = screenWidth / 2 + radius * Math.cos(angle_rad) + add100EdgeCase - 8;
+        var y = screenHeight / 2 - radius * Math.sin(angle_rad); // Note the '-' because of the coordinate system
         dc.setPenWidth(2);
         dc.setColor(
             battery <= 20 ? Graphics.COLOR_DK_RED : Graphics.COLOR_GREEN,
@@ -227,7 +227,7 @@ class WheelchairView extends WatchUi.WatchFace {
             height
         );
         // Adjust text position
-        var text_x = x + width + 5; // Shift text 5 units to the right of the battery rectangle
+        var text_x = x + width + 20; // Shift text 5 units to the right of the battery rectangle
         var text_y = y + height / 2 - 2; // Align the text vertically centered to the battery rectangle
         dc.drawText(
             text_x,

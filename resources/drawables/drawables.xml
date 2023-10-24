@@ -1,13 +1,12 @@
 <drawables>
     <bitmap id="LauncherIcon" filename="launcher_icon.png" />
-    <bitmap id="disconnected" filename="icons/bt-dis.png"/>
-    <bitmap id="connected" filename="icons/bt-conn.png"/>
-    <bitmap id="heart24" filename="icons/heart24.png"/>
-    <bitmap id="heart32" filename="icons/heart32.png"/>
+    <bitmap id="disconnected" filename="icons/disconnected.png"/>
+    <bitmap id="connected" filename="icons/bluetooth.png"/>
+    <bitmap id="heart" filename="icons/heart.png"/>
     <bitmap id="pushes" filename="icons/wheelchair.png"/>
     <bitmap id="sunny" filename="icons/sunny.png"/>
-    <bitmap id="rainy" filename="icons/rainy.png"/>
+    <bitmap id="rain" filename="icons/rain.png"/>
     <bitmap id="thunder" filename="icons/thunder.png"/>
     <bitmap id="cloudy" filename="icons/cloudy.png"/>
-    <bitmap id="snowy" filename="icons/snowy.png"/>
+    <bitmap id="snow" filename="icons/snow.png"/>
 </drawables>
