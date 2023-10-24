@@ -75,7 +75,6 @@ class WheelchairView extends WatchUi.WatchFace {
         drawHoursMinutes(dc);
         drawDate(dc);
         drawBatteryBluetooth(dc);
-        drawTemperature(dc);
         drawWeather(dc);
     }
     // Called when this View is removed from the screen. Save the
@@ -96,6 +95,167 @@ class WheelchairView extends WatchUi.WatchFace {
         dc.setColor(Graphics.COLOR_PURPLE, Graphics.COLOR_TRANSPARENT);
         dc.setPenWidth(16); // Adjust the thickness of the ring
         dc.drawArc(centerX, centerY, radius, attr, startAngle, endAngle);
+    }
+    private function drawWeather(dc){
+        drawForecast(dc);
+        drawTemperature(dc);
+    }
+    private function drawTemperature(dc) {
+        var tempOffset = 0;
+        var temperature = DataProvider.getTemperature();
+        if (temperature != null && temperature >= 100) {
+            tempOffset = 5;
+        }
+        var tempString = (temperature == null) ? "N/A" : temperature.format("%d");
+        var degreeSymbol = (temperature == null) ? "" : "°";
+        var angle_deg = 155; // 10:30 in degrees
+        var angle_rad = angle_deg * (Math.PI / 180);
+        var radius = screenWidth / 2;
+        var x = screenWidth / 2 + radius * Math.cos(angle_rad) + 90;
+        var y = screenHeight / 2 - radius * Math.sin(angle_rad);
+        dc.setColor(Graphics.COLOR_LT_GRAY, Graphics.COLOR_TRANSPARENT);
+        // Draw the degree symbol, with a manual offset
+        dc.drawText(
+            x+10,
+            y,
+            Graphics.FONT_SMALL,
+            tempString,
+            Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
+        );
+        dc.drawText(
+            x + tempOffset + 30,
+            y,
+            Graphics.FONT_SMALL,
+            degreeSymbol,
+            Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER
+        );
+    }
+    private function drawForecast(dc) {
+        var weatherCondition = DataProvider.getForecast();
+        if (weatherCondition == null) {
+            weatherCondition = 0;
+        }
+        var weatherImage;
+        // Assume weatherCondition is a number based on Garmin's API
+        switch(weatherCondition) {
+            // Clear conditions
+            case 0:  // CONDITION_CLEAR
+            case 22: // CONDITION_PARTLY_CLEAR
+            case 23: // CONDITION_MOSTLY_CLEAR
+            case 40: // CONDITION_FAIR
+                weatherImage = sunnyImage;
+                break;
+            // Cloudy conditions
+            case 1:  // CONDITION_PARTLY_CLOUDY
+            case 2:  // CONDITION_MOSTLY_CLOUDY
+            case 20: // CONDITION_CLOUDY
+            case 52: // CONDITION_THIN_CLOUDS
+                weatherImage = cloudyImage;
+                break;
+            // Rainy conditions
+            case 3:  // CONDITION_RAIN
+            case 14: // CONDITION_LIGHT_RAIN
+            case 15: // CONDITION_HEAVY_RAIN
+            case 25: // CONDITION_SHOWERS
+            case 26: // CONDITION_HEAVY_SHOWERS
+            case 27: // CONDITION_CHANCE_OF_SHOWERS
+            case 45: // CONDITION_CLOUDY_CHANCE_OF_RAIN
+                weatherImage = rainyImage;
+                break;
+            // Snowy conditions
+            case 4:  // CONDITION_SNOW
+            case 16: // CONDITION_LIGHT_SNOW
+            case 17: // CONDITION_HEAVY_SNOW
+            case 43: // CONDITION_CHANCE_OF_SNOW
+            case 46: // CONDITION_CLOUDY_CHANCE_OF_SNOW
+            case 48: // CONDITION_FLURRIES
+                weatherImage = snowyImage;
+                break;
+            // Thunderstorm conditions
+            case 6:  // CONDITION_THUNDERSTORMS
+            case 12: // CONDITION_SCATTERED_THUNDERSTORMS
+            case 28: // CONDITION_CHANCE_OF_THUNDERSTORMS
+                weatherImage = thunderImage;
+                break;
+            // Unhandled cases
+            default:
+                weatherImage = sunnyImage;
+                break;
+        }
+        var imgHeight = weatherImage.getHeight();
+        var angle_deg = 155;
+        var angle_rad = angle_deg * (Math.PI / 180);
+        var radius = screenWidth / 2;
+        var x = screenWidth / 2 + radius * Math.cos(angle_rad) + 35; 
+        var y = screenHeight / 2 - radius * Math.sin(angle_rad);
+        dc.drawBitmap(
+            x,
+            y - imgHeight / 2,
+            weatherImage
+        );
+    }
+    private function drawBatteryBluetooth(dc) {
+        var battery = DataProvider.getBatteryLevel();
+        var add100EdgeCase = 8;
+        if (battery == 100) {
+            add100EdgeCase = -4;
+        }
+        var batteryText = battery.format("%d") + "\u0025";
+        var bluetoothState = DataProvider.getBluetoothStatus();
+        // Check if connected
+        var isConnected = (bluetoothState == 2); // Or use the appropriate enum if available
+        var bluetoothImg = isConnected ? connectedImage : disconnectedImage; 
+        var height = 24;
+        var width = 48;
+        // Coordinates for 2PM
+        var angle_deg = 60; // 2 PM on the clock in degrees
+        var angle_rad = angle_deg * (Math.PI / 180);
+        var radius = screenWidth / 4;
+        var x = screenWidth / 2 + radius * Math.cos(angle_rad) + add100EdgeCase - 80;
+        var y = screenHeight / 2 - radius * Math.sin(angle_rad);
+        dc.setPenWidth(2);
+        dc.setColor(
+            battery <= 20 ? Graphics.COLOR_DK_RED : Graphics.COLOR_GREEN,
+            Graphics.COLOR_TRANSPARENT
+        );
+        // Draw the outer rect
+        dc.drawRoundedRectangle(
+            x,
+            y,
+            width,
+            height,
+            2
+        );
+        // Draw the small + on the right
+        dc.drawLine(
+            x + width + 1,
+            y + 3,
+            x + width + 1,
+            y + height - 3
+        );
+        // Fill the rect based on current battery
+        dc.fillRectangle(
+            x + 1,
+            y,
+            (width - 2) * battery / 100,
+            height
+        );
+        // Adjust text position
+        var text_x = x + width + 20; // Shift text 5 units to the right of the battery rectangle
+        var text_y = y + height / 2 - 2; // Align the text vertically centered to the battery rectangle
+        dc.drawText(
+            text_x,
+            text_y,
+            Graphics.FONT_SMALL,
+            batteryText,
+            Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER // Left justify and vertically center
+        );
+        // Draw the bluetooth to the right of the text
+        dc.drawBitmap(
+            x + 175 - add100EdgeCase, 
+            y-10,
+            bluetoothImg
+        );
     }
     private function drawHeartRate(dc, image) {
         var imageWidth = image.getWidth();
@@ -189,163 +349,6 @@ class WheelchairView extends WatchUi.WatchFace {
             Graphics.FONT_SMALL,
             dateString,
             Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
-        );
-    }
-    private function drawBatteryBluetooth(dc) {
-        var battery = DataProvider.getBatteryLevel();
-        var add100EdgeCase = 8;
-        if (battery == 100) {
-            add100EdgeCase = -4;
-        }
-        var batteryText = battery.format("%d") + "\u0025";
-        var bluetoothState = DataProvider.getBluetoothStatus();
-        // Check if connected
-        var isConnected = (bluetoothState == 2); // Or use the appropriate enum if available
-        var bluetoothImg = isConnected ? connectedImage : disconnectedImage; 
-        var height = 24;
-        var width = 48;
-        // Coordinates for 2PM
-        var angle_deg = 60; // 2 PM on the clock in degrees
-        var angle_rad = angle_deg * (Math.PI / 180);
-        var radius = screenWidth / 4;
-        var x = screenWidth / 2 + radius * Math.cos(angle_rad) + add100EdgeCase - 8;
-        var y = screenHeight / 2 - radius * Math.sin(angle_rad); // Note the '-' because of the coordinate system
-        dc.setPenWidth(2);
-        dc.setColor(
-            battery <= 20 ? Graphics.COLOR_DK_RED : Graphics.COLOR_GREEN,
-            Graphics.COLOR_TRANSPARENT
-        );
-        // Draw the outer rect
-        dc.drawRoundedRectangle(
-            x,
-            y,
-            width,
-            height,
-            2
-        );
-        // Draw the small + on the right
-        dc.drawLine(
-            x + width + 1,
-            y + 3,
-            x + width + 1,
-            y + height - 3
-        );
-        // Fill the rect based on current battery
-        dc.fillRectangle(
-            x + 1,
-            y,
-            (width - 2) * battery / 100,
-            height
-        );
-        // Adjust text position
-        var text_x = x + width + 20; // Shift text 5 units to the right of the battery rectangle
-        var text_y = y + height / 2 - 2; // Align the text vertically centered to the battery rectangle
-        dc.drawText(
-            text_x,
-            text_y,
-            Graphics.FONT_SMALL,
-            batteryText,
-            Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER // Left justify and vertically center
-        );
-        // Draw the bluetooth to the right of the text
-        dc.drawBitmap(
-            x + 78 - add100EdgeCase, 
-            y + height / 2,
-            bluetoothImg
-        );
-    }
-     private function drawTemperature(dc) {
-        var tempOffset = 0;
-        var temperature = DataProvider.getTemperature();
-        if (temperature != null && temperature >= 100) {
-            tempOffset = 5;
-        }
-        var tempString = (temperature == null) ? "N/A" : temperature.format("%d");
-        var degreeSymbol = (temperature == null) ? "" : "°";
-        var angle_deg = 155; // 10:30 in degrees
-        var angle_rad = angle_deg * (Math.PI / 180);
-        var radius = screenWidth / 2;
-        var x = screenWidth / 2 + radius * Math.cos(angle_rad) + 105;
-        var y = screenHeight / 2 - radius * Math.sin(angle_rad);
-        dc.setColor(Graphics.COLOR_LT_GRAY, Graphics.COLOR_TRANSPARENT);
-        // Draw the degree symbol, with a manual offset
-        dc.drawText(
-            x+10,
-            y,
-            Graphics.FONT_SMALL,
-            tempString,
-            Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
-        );
-        dc.drawText(
-            x + tempOffset + 30,
-            y,
-            Graphics.FONT_SMALL,
-            degreeSymbol,
-            Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER
-        );
-    }
-    private function drawWeather(dc) {
-        var weatherCondition = DataProvider.getForecast();
-        if (weatherCondition == null) {
-            weatherCondition = 0;
-        }
-        var weatherImage;
-        // Assume weatherCondition is a number based on Garmin's API
-        switch(weatherCondition) {
-            // Clear conditions
-            case 0:  // CONDITION_CLEAR
-            case 22: // CONDITION_PARTLY_CLEAR
-            case 23: // CONDITION_MOSTLY_CLEAR
-            case 40: // CONDITION_FAIR
-                weatherImage = sunnyImage;
-                break;
-            // Cloudy conditions
-            case 1:  // CONDITION_PARTLY_CLOUDY
-            case 2:  // CONDITION_MOSTLY_CLOUDY
-            case 20: // CONDITION_CLOUDY
-            case 52: // CONDITION_THIN_CLOUDS
-                weatherImage = cloudyImage;
-                break;
-            // Rainy conditions
-            case 3:  // CONDITION_RAIN
-            case 14: // CONDITION_LIGHT_RAIN
-            case 15: // CONDITION_HEAVY_RAIN
-            case 25: // CONDITION_SHOWERS
-            case 26: // CONDITION_HEAVY_SHOWERS
-            case 27: // CONDITION_CHANCE_OF_SHOWERS
-            case 45: // CONDITION_CLOUDY_CHANCE_OF_RAIN
-                weatherImage = rainyImage;
-                break;
-            // Snowy conditions
-            case 4:  // CONDITION_SNOW
-            case 16: // CONDITION_LIGHT_SNOW
-            case 17: // CONDITION_HEAVY_SNOW
-            case 43: // CONDITION_CHANCE_OF_SNOW
-            case 46: // CONDITION_CLOUDY_CHANCE_OF_SNOW
-            case 48: // CONDITION_FLURRIES
-                weatherImage = snowyImage;
-                break;
-            // Thunderstorm conditions
-            case 6:  // CONDITION_THUNDERSTORMS
-            case 12: // CONDITION_SCATTERED_THUNDERSTORMS
-            case 28: // CONDITION_CHANCE_OF_THUNDERSTORMS
-                weatherImage = thunderImage;
-                break;
-            // Unhandled cases
-            default:
-                weatherImage = sunnyImage;
-                break;
-        }
-        var imgHeight = weatherImage.getHeight();
-        var angle_deg = 155;
-        var angle_rad = angle_deg * (Math.PI / 180);
-        var radius = screenWidth / 2;
-        var x = screenWidth / 2 + radius * Math.cos(angle_rad) + config["forecastX"]; 
-        var y = screenHeight / 2 - radius * Math.sin(angle_rad);
-        dc.drawBitmap(
-            x,
-            y - imgHeight / 2,
-            weatherImage
         );
     }
 }
