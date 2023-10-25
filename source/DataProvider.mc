@@ -11,11 +11,11 @@ module DataProvider {
     function getHeartRate() {
         var heartRate = 0;
         var info = Activity.getActivityInfo();
-        if (info != null) {
+        if (info != null && info.currentHeartRate != null) {
             heartRate = info.currentHeartRate;
         } else {
             var latestHeartRateSample = ActivityMonitor.getHeartRateHistory(1, true).next();
-            if (latestHeartRateSample != null) {
+            if (latestHeartRateSample != null && latestHeartRateSample.heartRate != null) {
                 heartRate = latestHeartRateSample.heartRate;
             }
         }

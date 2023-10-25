@@ -70,10 +70,10 @@ class WheelchairView extends WatchUi.WatchFace {
         View.onUpdate(dc);
         // Draw the UI
         drawRing(dc);
+        drawDate(dc);
         drawHeartRate(dc, heartImage);
         drawPushes(dc);
         drawHoursMinutes(dc);
-        drawDate(dc);
         drawBatteryBluetooth(dc);
         drawWeather(dc);
     }
@@ -95,6 +95,18 @@ class WheelchairView extends WatchUi.WatchFace {
         dc.setColor(Graphics.COLOR_PURPLE, Graphics.COLOR_TRANSPARENT);
         dc.setPenWidth(16); // Adjust the thickness of the ring
         dc.drawArc(centerX, centerY, radius, attr, startAngle, endAngle);
+    }
+    private function drawDate(dc) {
+        var date = DataProvider.getCurrentDate();
+        var dateString = Lang.format("$1$ $2$ $3$", [date.day_of_week, date.month, date.day]);
+        dc.setColor(Graphics.COLOR_LT_GRAY, Graphics.COLOR_TRANSPARENT);
+        dc.drawText(
+            screenWidth / 2,
+            72,
+            Graphics.FONT_SMALL,
+            dateString,
+            Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
+        );
     }
     private function drawWeather(dc){
         drawForecast(dc);
@@ -258,70 +270,6 @@ class WheelchairView extends WatchUi.WatchFace {
             bluetoothImg
         );
     }
-    private function drawHeartRate(dc, image) {
-        var imageWidth = image.getWidth();
-        var angle_deg = 225; // 7:30 PM on the clock in degrees
-        var angle_rad = angle_deg * (Math.PI / 180);
-        var radius = screenWidth / 2;
-        var heartX = screenWidth / 2 + radius * Math.cos(angle_rad);
-        var heartY = screenHeight / 2 - radius * Math.sin(angle_rad);
-        var heartRate = DataProvider.getHeartRate();
-        dc.setColor(
-            (heartRate != null && heartRate > 120) ? Graphics.COLOR_DK_RED : Graphics.COLOR_LT_GRAY,
-            Graphics.COLOR_TRANSPARENT
-        );
-        var x = heartX + imageWidth;
-        var y = heartY + 20;
-        var heartTextOffset = -5;
-        if (heartRate != null && heartRate >= 100) {
-            heartTextOffset = 0;
-        }
-        dc.drawBitmap(
-            heartX,
-            heartY + 10,
-            heartImage 
-        );
-        dc.drawText(
-            x + heartTextOffset,
-            y,
-            Graphics.FONT_SMALL,
-            (heartRate == 0 || heartRate == null) ? "N/A" : heartRate.format("%d"),
-            Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER // Changed to center justify
-        );
-    }
-    private function drawPushes(dc) {
-        var pushes = DataProvider.getPushes();
-        var pushesOffset = 0;
-        if (pushes != null && pushes > 10000.0){
-            pushesOffset = -5;
-        }
-        var pushesInK = pushes / 1000.0;
-        var formattedPushes = pushesInK.format("%.1f") + "K";
-        dc.setColor(
-            pushes > 10000 ? Graphics.COLOR_DK_GREEN : Graphics.COLOR_LT_GRAY,
-            Graphics.COLOR_TRANSPARENT
-        );
-        var angle_deg = 345; // 2:45 PM, symmetrical to 195 degrees for heart
-        var angle_rad = angle_deg * (Math.PI / 180);
-        var radius = screenWidth / 2;
-        var x = screenWidth / 2 + radius * Math.cos(angle_rad);
-        var y = screenHeight / 2 - radius * Math.sin(angle_rad);
-        var imgWidth = pushesImage.getWidth();
-        var imgHeight = pushesImage.getHeight();
-        // Draw the pushes image to the left of the text
-        dc.drawBitmap(
-            x - imgWidth + pushesOffset, 
-            y - imgHeight / 2,
-            pushesImage
-        );
-        dc.drawText(
-            x,
-            y,
-            Graphics.FONT_SMALL,
-            formattedPushes,
-            Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
-        );
-    }
     private function drawHoursMinutes(dc) {
         var clockTime = DataProvider.getCurrentTime();
         var hours = clockTime.hour;
@@ -340,15 +288,69 @@ class WheelchairView extends WatchUi.WatchFace {
         var view = View.findDrawableById("TimeLabel") as Text;
         view.setText(timeString);
     }
-    private function drawDate(dc) {
-        var date = DataProvider.getCurrentDate();
-        var dateString = Lang.format("$1$ $2$ $3$", [date.day_of_week, date.month, date.day]);
-        dc.setColor(Graphics.COLOR_LT_GRAY, Graphics.COLOR_TRANSPARENT);
+    private function drawHeartRate(dc, image) {
+        var imageWidth = image.getWidth();
+        var angle_deg = 225; // 7:30 PM on the clock in degrees
+        var angle_rad = angle_deg * (Math.PI / 180);
+        var radius = screenWidth / 2;
+        var heartX = screenWidth / 2 + radius * Math.cos(angle_rad);
+        var heartY = screenHeight / 2 - radius * Math.sin(angle_rad) - 60;
+        var heartRate = DataProvider.getHeartRate();
+        heartRate = 140;
+        dc.setColor(
+            (heartRate != null && heartRate > 120) ? Graphics.COLOR_DK_RED : Graphics.COLOR_LT_GRAY,
+            Graphics.COLOR_TRANSPARENT
+        );
+        var x = heartX + imageWidth;
+        var y = heartY + 20;
+        var edgeCase = 0;
+        if (heartRate != null && (heartRate >= 100 || heartRate == 0)) {
+            edgeCase = 15;
+        }
+        dc.drawBitmap(
+            heartX,
+            heartY,
+            heartImage 
+        );
         dc.drawText(
-            screenWidth / 2,
-            60,
+            x + edgeCase + 37,
+            y-2,
             Graphics.FONT_SMALL,
-            dateString,
+            heartRate == 0 ? "N/A" : heartRate.format("%d"),
+            Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER // Changed to center justify
+        );
+    }
+    private function drawPushes(dc) {
+        var pushes = DataProvider.getPushes();
+        pushes = 5330;
+        var edgeCase = 0;
+        if (pushes != null && pushes > 10000.0){
+            edgeCase = -5;
+        }
+        var pushesInK = pushes / 1000.0;
+        var formattedPushes = pushesInK.format("%.1f") + "K";
+        dc.setColor(
+            pushes > 10000 ? Graphics.COLOR_DK_GREEN : Graphics.COLOR_LT_GRAY,
+            Graphics.COLOR_TRANSPARENT
+        );
+        var angle_deg = 225; // 2:45 PM, symmetrical to 225 degrees for heart
+        var angle_rad = angle_deg * (Math.PI / 180);
+        var radius = screenWidth / 2;
+        var x = screenWidth / 2 + radius * Math.cos(angle_rad) + 255;
+        var y = screenHeight / 2 - radius * Math.sin(angle_rad) - 42;
+        var imgWidth = pushesImage.getWidth();
+        var imgHeight = pushesImage.getHeight();
+        // Draw the pushes image to the left of the text
+        dc.drawBitmap(
+            x - imgWidth + edgeCase - 36, 
+            y - 17,
+            pushesImage
+        );
+        dc.drawText(
+            x + 12,
+            y,
+            Graphics.FONT_SMALL,
+            formattedPushes,
             Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
         );
     }
