@@ -27,7 +27,7 @@ class WheelchairView extends WatchUi.WatchFace {
         WatchFace.initialize();
         var deviceInfo = System.getDeviceSettings();
         // 390*390 for vivoactive + venu3s
-        if ( deviceInfo.screenWidth == 455 ){
+        if ( deviceInfo.screenWidth == 390 ){
             config = {
                 "forecastX" => 50,
                 "bluetooth" => 0,
@@ -37,7 +37,7 @@ class WheelchairView extends WatchUi.WatchFace {
         } else {
             // 454*454 for venu3
             config = {
-                "forecastX" => 50,
+                "forecastX" => 0,
                 "bluetooth" => 0,
                 "temperature" => 0,
                 "weather" => 0
@@ -101,10 +101,10 @@ class WheelchairView extends WatchUi.WatchFace {
         drawTemperature(dc);
     }
     private function drawTemperature(dc) {
-        var tempOffset = 0;
+        var edgeCase = 0;
         var temperature = DataProvider.getTemperature();
         if (temperature != null && temperature >= 100) {
-            tempOffset = 5;
+            edgeCase = 5;
         }
         var tempString = (temperature == null) ? "N/A" : temperature.format("%d");
         var degreeSymbol = (temperature == null) ? "" : "°";
@@ -123,7 +123,7 @@ class WheelchairView extends WatchUi.WatchFace {
             Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
         );
         dc.drawText(
-            x + tempOffset + 30,
+            x + edgeCase + 30,
             y,
             Graphics.FONT_SMALL,
             degreeSymbol,
@@ -196,9 +196,9 @@ class WheelchairView extends WatchUi.WatchFace {
     }
     private function drawBatteryBluetooth(dc) {
         var battery = DataProvider.getBatteryLevel();
-        var add100EdgeCase = 8;
+        var edgeCase = 0;
         if (battery == 100) {
-            add100EdgeCase = -4;
+            edgeCase = -15;
         }
         var batteryText = battery.format("%d") + "\u0025";
         var bluetoothState = DataProvider.getBluetoothStatus();
@@ -211,8 +211,8 @@ class WheelchairView extends WatchUi.WatchFace {
         var angle_deg = 60; // 2 PM on the clock in degrees
         var angle_rad = angle_deg * (Math.PI / 180);
         var radius = screenWidth / 4;
-        var x = screenWidth / 2 + radius * Math.cos(angle_rad) + add100EdgeCase - 80;
-        var y = screenHeight / 2 - radius * Math.sin(angle_rad);
+        var x = screenWidth / 2 + radius * Math.cos(angle_rad) + edgeCase - 70;
+        var y = screenHeight / 2 - radius * Math.sin(angle_rad) - 10;
         dc.setPenWidth(2);
         dc.setColor(
             battery <= 20 ? Graphics.COLOR_DK_RED : Graphics.COLOR_GREEN,
@@ -241,7 +241,7 @@ class WheelchairView extends WatchUi.WatchFace {
             height
         );
         // Adjust text position
-        var text_x = x + width + 20; // Shift text 5 units to the right of the battery rectangle
+        var text_x = x + width + 13; // Shift text 5 units to the right of the battery rectangle
         var text_y = y + height / 2 - 2; // Align the text vertically centered to the battery rectangle
         dc.drawText(
             text_x,
@@ -251,9 +251,10 @@ class WheelchairView extends WatchUi.WatchFace {
             Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER // Left justify and vertically center
         );
         // Draw the bluetooth to the right of the text
+        // this x is an x without the edgeCase subtraction
         dc.drawBitmap(
-            x + 175 - add100EdgeCase, 
-            y-10,
+            (screenWidth / 2 + radius * Math.cos(angle_rad) - 72) + 162, 
+            y - 7,
             bluetoothImg
         );
     }
