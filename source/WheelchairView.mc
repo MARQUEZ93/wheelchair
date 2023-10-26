@@ -29,20 +29,16 @@ class WheelchairView extends WatchUi.WatchFace {
         WatchFace.initialize();
         var deviceInfo = System.getDeviceSettings();
         // 390*390 for vivoactive + venu3s
-        if ( deviceInfo.screenWidth == 390 ){
+        if ( deviceInfo != null && deviceInfo.screenWidth != null && deviceInfo.screenWidth == 390 ){
             config = {
-                "forecastX" => 50,
-                "bluetooth" => 0,
-                "pushesX" => 0,
-                "weather" => 0
+                "pushX" => -35,
+                "bluetoothX" => -10
             };
         } else {
             // 454*454 for venu3
             config = {
-                "forecastX" => 0,
-                "bluetooth" => 0,
-                "temperature" => 0,
-                "weather" => 0
+                "pushX" => 0,
+                "bluetoothX" => 0
             };
         }
     }
@@ -268,8 +264,9 @@ class WheelchairView extends WatchUi.WatchFace {
         );
         // Draw the bluetooth to the right of the text
         // this x is an x without the edgeCase subtraction
+        var bluetoothX = (screenWidth / 2 + radius * Math.cos(angle_rad)) + 90 + config["bluetoothX"];
         dc.drawBitmap(
-            (screenWidth / 2 + radius * Math.cos(angle_rad) - 72) + 162, 
+            bluetoothX, 
             y - 7,
             bluetoothImg
         );
@@ -346,7 +343,7 @@ class WheelchairView extends WatchUi.WatchFace {
         var angle_deg = 225; // 2:45 PM, symmetrical to 225 degrees for heart
         var angle_rad = angle_deg * (Math.PI / 180);
         var radius = screenWidth / 2;
-        var x = screenWidth / 2 + radius * Math.cos(angle_rad) + 255;
+        var x = screenWidth / 2 + radius * Math.cos(angle_rad) + 255 + config["pushX"];
         var y = screenHeight / 2 - radius * Math.sin(angle_rad) - 37;
         var imgWidth = pushesImage.getWidth();
         // Draw the pushes image to the left of the text
