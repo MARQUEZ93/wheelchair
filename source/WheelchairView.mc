@@ -127,7 +127,7 @@ class WheelchairView extends WatchUi.WatchFace {
         var angle_deg = 155; // 10:30 in degrees
         var angle_rad = angle_deg * (Math.PI / 180);
         var radius = screenWidth / 2;
-        var x = screenWidth / 2 + radius * Math.cos(angle_rad) + 90;
+        var x = screenWidth / 2 + radius * Math.cos(angle_rad) + 95;
         var y = screenHeight / 2 - radius * Math.sin(angle_rad) + 10;
         dc.setColor(Graphics.COLOR_LT_GRAY, Graphics.COLOR_TRANSPARENT);
         // Draw the degree symbol, with a manual offset
@@ -202,7 +202,7 @@ class WheelchairView extends WatchUi.WatchFace {
         var angle_deg = 155;
         var angle_rad = angle_deg * (Math.PI / 180);
         var radius = screenWidth / 2;
-        var x = screenWidth / 2 + radius * Math.cos(angle_rad) + 35; 
+        var x = screenWidth / 2 + radius * Math.cos(angle_rad) + 40; 
         var y = screenHeight / 2 - radius * Math.sin(angle_rad) + 10;
         dc.drawBitmap(
             x,
@@ -305,7 +305,7 @@ class WheelchairView extends WatchUi.WatchFace {
         var angle_deg = 225; // 7:30 PM on the clock in degrees
         var angle_rad = angle_deg * (Math.PI / 180);
         var radius = screenWidth / 2;
-        var heartX = screenWidth / 2 + radius * Math.cos(angle_rad);
+        var heartX = screenWidth / 2 + radius * Math.cos(angle_rad) + 5;
         var heartY = screenHeight / 2 - radius * Math.sin(angle_rad) - 55;
         var heartRate = DataProvider.getHeartRate();
         dc.setColor(
