@@ -128,7 +128,7 @@ class WheelchairView extends WatchUi.WatchFace {
         var angle_rad = angle_deg * (Math.PI / 180);
         var radius = screenWidth / 2;
         var x = screenWidth / 2 + radius * Math.cos(angle_rad) + 90;
-        var y = screenHeight / 2 - radius * Math.sin(angle_rad);
+        var y = screenHeight / 2 - radius * Math.sin(angle_rad) + 10;
         dc.setColor(Graphics.COLOR_LT_GRAY, Graphics.COLOR_TRANSPARENT);
         // Draw the degree symbol, with a manual offset
         dc.drawText(
@@ -203,7 +203,7 @@ class WheelchairView extends WatchUi.WatchFace {
         var angle_rad = angle_deg * (Math.PI / 180);
         var radius = screenWidth / 2;
         var x = screenWidth / 2 + radius * Math.cos(angle_rad) + 35; 
-        var y = screenHeight / 2 - radius * Math.sin(angle_rad);
+        var y = screenHeight / 2 - radius * Math.sin(angle_rad) + 10;
         dc.drawBitmap(
             x,
             y - imgHeight / 2,
@@ -228,7 +228,7 @@ class WheelchairView extends WatchUi.WatchFace {
         var angle_rad = angle_deg * (Math.PI / 180);
         var radius = screenWidth / 4;
         var x = screenWidth / 2 + radius * Math.cos(angle_rad) + edgeCase - 70;
-        var y = screenHeight / 2 - radius * Math.sin(angle_rad) - 10;
+        var y = screenHeight / 2 - radius * Math.sin(angle_rad);
         dc.setPenWidth(2);
         dc.setColor(
             battery <= 20 ? Graphics.COLOR_DK_RED : Graphics.COLOR_GREEN,
@@ -289,8 +289,16 @@ class WheelchairView extends WatchUi.WatchFace {
             hour12 = 12;
         }
         var timeString = Lang.format("$1$:$2$", [hour12.format("%d"), clockTime.min.format("%02d")]);
-        var view = View.findDrawableById("TimeLabel") as Text;
-        view.setText(timeString);
+        var x = screenWidth / 2; // Centered horizontally
+        var y = screenHeight / 2 + 20;
+        dc.setColor(Graphics.COLOR_LT_GRAY, Graphics.COLOR_TRANSPARENT);
+        dc.drawText(
+            x,
+            y,
+            Graphics.FONT_NUMBER_THAI_HOT,
+            timeString,
+            Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
+        );
     }
     private function drawHeartRate(dc) {
         var imageWidth = heartImage.getWidth();
@@ -298,7 +306,7 @@ class WheelchairView extends WatchUi.WatchFace {
         var angle_rad = angle_deg * (Math.PI / 180);
         var radius = screenWidth / 2;
         var heartX = screenWidth / 2 + radius * Math.cos(angle_rad);
-        var heartY = screenHeight / 2 - radius * Math.sin(angle_rad) - 60;
+        var heartY = screenHeight / 2 - radius * Math.sin(angle_rad) - 55;
         var heartRate = DataProvider.getHeartRate();
         dc.setColor(
             (heartRate != null && heartRate > 120) ? Graphics.COLOR_DK_RED : Graphics.COLOR_LT_GRAY,
@@ -325,7 +333,6 @@ class WheelchairView extends WatchUi.WatchFace {
     }
     private function drawPushes(dc) {
         var pushes = DataProvider.getPushes();
-        pushes = 5330;
         var edgeCase = 0;
         if (pushes != null && pushes > 10000.0){
             edgeCase = -5;
@@ -340,7 +347,7 @@ class WheelchairView extends WatchUi.WatchFace {
         var angle_rad = angle_deg * (Math.PI / 180);
         var radius = screenWidth / 2;
         var x = screenWidth / 2 + radius * Math.cos(angle_rad) + 255;
-        var y = screenHeight / 2 - radius * Math.sin(angle_rad) - 42;
+        var y = screenHeight / 2 - radius * Math.sin(angle_rad) - 37;
         var imgWidth = pushesImage.getWidth();
         var imgHeight = pushesImage.getHeight();
         // Draw the pushes image to the left of the text
