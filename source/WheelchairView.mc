@@ -349,7 +349,6 @@ class WheelchairView extends WatchUi.WatchFace {
         var x = screenWidth / 2 + radius * Math.cos(angle_rad) + 255;
         var y = screenHeight / 2 - radius * Math.sin(angle_rad) - 37;
         var imgWidth = pushesImage.getWidth();
-        var imgHeight = pushesImage.getHeight();
         // Draw the pushes image to the left of the text
         dc.drawBitmap(
             x - imgWidth + edgeCase - 36, 
