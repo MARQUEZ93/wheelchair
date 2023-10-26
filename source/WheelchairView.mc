@@ -11,6 +11,7 @@ import DataProvider;
 class WheelchairView extends WatchUi.WatchFace {
     private var screenWidth;
     private var screenHeight;
+    // icon images
     private var pushesImage;
     private var connectedImage;
     private var disconnectedImage;
@@ -21,6 +22,7 @@ class WheelchairView extends WatchUi.WatchFace {
     private var snowyImage;
     private var cloudyImage;
     private var thunderImage;
+    // configuration for different devices
     private var config;
 
     function initialize() {
@@ -50,10 +52,12 @@ class WheelchairView extends WatchUi.WatchFace {
         setLayout(Rez.Layouts.WatchFace(dc));
         screenWidth = dc.getWidth();
         screenHeight = dc.getHeight();
+        // icon images
         pushesImage = Application.loadResource(Rez.Drawables.pushes);
         disconnectedImage = Application.loadResource(Rez.Drawables.disconnected);
         connectedImage = Application.loadResource(Rez.Drawables.connected);
         heartImage = Application.loadResource(Rez.Drawables.heart);
+        // forecast images
         sunnyImage = Application.loadResource(Rez.Drawables.sunny);
         rainyImage = Application.loadResource(Rez.Drawables.rain);
         snowyImage = Application.loadResource(Rez.Drawables.snow);
@@ -71,9 +75,9 @@ class WheelchairView extends WatchUi.WatchFace {
         // Draw the UI
         drawRing(dc);
         drawDate(dc);
-        drawHeartRate(dc, heartImage);
+        drawHeartRate(dc);
         drawPushes(dc);
-        drawHoursMinutes(dc);
+        drawTime(dc);
         drawBatteryBluetooth(dc);
         drawWeather(dc);
     }
@@ -270,7 +274,7 @@ class WheelchairView extends WatchUi.WatchFace {
             bluetoothImg
         );
     }
-    private function drawHoursMinutes(dc) {
+    private function drawTime(dc) {
         var clockTime = DataProvider.getCurrentTime();
         var hours = clockTime.hour;
         if (hours > 12) {
@@ -288,15 +292,14 @@ class WheelchairView extends WatchUi.WatchFace {
         var view = View.findDrawableById("TimeLabel") as Text;
         view.setText(timeString);
     }
-    private function drawHeartRate(dc, image) {
-        var imageWidth = image.getWidth();
+    private function drawHeartRate(dc) {
+        var imageWidth = heartImage.getWidth();
         var angle_deg = 225; // 7:30 PM on the clock in degrees
         var angle_rad = angle_deg * (Math.PI / 180);
         var radius = screenWidth / 2;
         var heartX = screenWidth / 2 + radius * Math.cos(angle_rad);
         var heartY = screenHeight / 2 - radius * Math.sin(angle_rad) - 60;
         var heartRate = DataProvider.getHeartRate();
-        heartRate = 140;
         dc.setColor(
             (heartRate != null && heartRate > 120) ? Graphics.COLOR_DK_RED : Graphics.COLOR_LT_GRAY,
             Graphics.COLOR_TRANSPARENT
