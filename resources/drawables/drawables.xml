@@ -1,5 +1,5 @@
 <drawables>
-    <bitmap id="LauncherIcon" filename="launcher_icon.png" />
+    <bitmap id="LauncherIcon" filename="wheelchair_launcher.png" />
     <bitmap id="disconnected" filename="icons/disconnected.png"/>
     <bitmap id="connected" filename="icons/bluetooth.png"/>
     <bitmap id="heart" filename="icons/heart.png"/>
