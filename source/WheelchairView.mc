@@ -264,7 +264,7 @@ class WheelchairView extends WatchUi.WatchFace {
         );
         // Draw the bluetooth to the right of the text
         // this x is an x without the edgeCase subtraction
-        var bluetoothX = (screenWidth / 2 + radius * Math.cos(angle_rad)) + 90 + config["bluetoothX"];
+        var bluetoothX = (screenWidth / 2 + radius * Math.cos(angle_rad)) + 90 + config.get("bluetoothX");
         dc.drawBitmap(
             bluetoothX, 
             y - 7,
@@ -343,7 +343,7 @@ class WheelchairView extends WatchUi.WatchFace {
         var angle_deg = 225; // 2:45 PM, symmetrical to 225 degrees for heart
         var angle_rad = angle_deg * (Math.PI / 180);
         var radius = screenWidth / 2;
-        var x = screenWidth / 2 + radius * Math.cos(angle_rad) + 255 + config["pushX"];
+        var x = screenWidth / 2 + radius * Math.cos(angle_rad) + 255 + config.get("pushX");
         var y = screenHeight / 2 - radius * Math.sin(angle_rad) - 37;
         var imgWidth = pushesImage.getWidth();
         // Draw the pushes image to the left of the text
