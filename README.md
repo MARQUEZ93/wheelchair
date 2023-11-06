@@ -8,7 +8,7 @@ Per Garmin documentation, only three devices support Wheelchair push count:
 2) Venu® 3S
 3) vívoactive® 5
 
-<!-- <p align="center"><img src="https://i.imgur.com/NadKoiL.jpg" width="200px" /></p> -->
+<p align="center"><img src="https://imgur.com/IrHsYCD" width="200px" /></p>
 
 ## Features
 - 🕚 Time (Hours:Minutes)
@@ -29,9 +29,9 @@ This is sad (I reached out to both Dexcom & Garmin. Received no response).
 
 Irregardless, I spent too much time w/ the Garmin SDK to not publish something. 
 
-While looking over API Documentation, I noticed the [pushDistance](https://developer.garmin.com/connect-iq/api-docs/Toybox/ActivityMonitor/Info.html#pushDistance-var) field. I found zero results for 'Wheelchair' or 'Wheel Chair' in the Garmin IQ Connect Store (Diabetes/Dexcom doesn't have many options neither). 
+While looking over API Documentation, I noticed the [pushDistance](https://developer.garmin.com/connect-iq/api-docs/Toybox/ActivityMonitor/Info.html#pushDistance-var) field. I found zero results for 'Wheelchair' or 'Wheel Chair' in the Garmin IQ Connect Store (Diabetes/Dexcom/Diabetic only have two options in sum FWIW). 
 
-My goal is for one download & one positive review :) 
+My goal is for one download & one positive review from someone in a wheelchair :) 
 
 ## Credits
 
@@ -41,4 +41,4 @@ My goal is for one download & one positive review :)
 
 showmethecodevideos@gmail.com
 
-Email me any bugs, edge cases not handled, improvements etc. I rely on the CIQ Simulator for testing different devices. 
+Email me any bugs, edge cases not handled, improvements etc. I rely on the CIQ Simulator for testing different devices as I do not own either of the 3 compatible devices.
