@@ -33,14 +33,16 @@ class WheelchairView extends WatchUi.WatchFace {
             config = {
                 "pushX" => -35,
                 "bluetoothX" => -10,
-                "temperatureX" => 0
+                "temperatureX" => 0,
+                "heartX" => -5
             };
         } else {
             // 454*454 for venu3
             config = {
                 "pushX" => 0,
                 "bluetoothX" => 0,
-                "temperatureX" => 7
+                "temperatureX" => 7,
+                "heartX" => 0
             };
         }
     }
@@ -118,7 +120,7 @@ class WheelchairView extends WatchUi.WatchFace {
         var edgeCase = 0;
         var temperature = DataProvider.getTemperature();
         if (temperature != null && temperature >= 100) {
-            edgeCase = 5;
+            edgeCase = 10;
         }
         var tempString = (temperature == null) ? "N/A" : temperature.format("%d");
         var degreeSymbol = (temperature == null) ? "" : "°";
@@ -200,7 +202,7 @@ class WheelchairView extends WatchUi.WatchFace {
         var angle_deg = 155;
         var angle_rad = angle_deg * (Math.PI / 180);
         var radius = screenWidth / 2;
-        var x = screenWidth / 2 + radius * Math.cos(angle_rad) + 30; 
+        var x = screenWidth / 2 + radius * Math.cos(angle_rad) + 25; 
         var y = screenHeight / 2 - radius * Math.sin(angle_rad) + 10;
         dc.drawBitmap(
             x,
@@ -212,7 +214,7 @@ class WheelchairView extends WatchUi.WatchFace {
         var battery = DataProvider.getBatteryLevel();
         var edgeCase = 0;
         if (battery == 100) {
-            edgeCase = -15;
+            edgeCase = -10;
         }
         var batteryText = battery.format("%d") + "\u0025";
         var bluetoothState = DataProvider.getBluetoothStatus();
@@ -323,7 +325,7 @@ class WheelchairView extends WatchUi.WatchFace {
             heartImage 
         );
         dc.drawText(
-            x + edgeCase + 37,
+            x + edgeCase + 37 + config.get("heartX"),
             y-2,
             Graphics.FONT_SMALL,
             heartRate == 0 ? "N/A" : heartRate.format("%d"),
@@ -334,7 +336,10 @@ class WheelchairView extends WatchUi.WatchFace {
         var pushes = DataProvider.getPushes();
         var edgeCase = 0;
         if (pushes != null && pushes > 10000.0){
-            edgeCase = -5;
+            edgeCase = -8;
+            if (pushes > 100000.0){
+                edgeCase = -16;
+            }
         }
         var pushesInK = pushes / 1000.0;
         var formattedPushes = pushesInK.format("%.1f") + "K";
