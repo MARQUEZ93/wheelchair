@@ -8,7 +8,7 @@ Per Garmin documentation, only three devices support Wheelchair push count:
 2) Venu® 3S
 3) vívoactive® 5
 
-<p align="center"><img src="https://imgur.com/IrHsYCD" width="200px" /></p>
+<p align="center"><img src="https://i.imgur.com/IrHsYCD.png" width="200px" /></p>
 
 ## Features
 - 🕚 Time (Hours:Minutes)
