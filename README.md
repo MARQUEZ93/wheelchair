@@ -29,9 +29,9 @@ This is sad (I reached out to both Dexcom & Garmin. Received no response).
 
 Irregardless, I spent too much time w/ the Garmin SDK to not publish something. 
 
-While looking over API Documentation, I noticed the [pushDistance](https://developer.garmin.com/connect-iq/api-docs/Toybox/ActivityMonitor/Info.html#pushDistance-var) field. I found zero results for 'Wheelchair' or 'Wheel Chair' in the Garmin IQ Connect Store (Diabetes/Dexcom/Diabetic only have two options in sum FWIW). 
+While looking over API Documentation, I noticed the [pushDistance](https://developer.garmin.com/connect-iq/api-docs/Toybox/ActivityMonitor/Info.html#pushDistance-var) field. I found zero results for 'Wheelchair' or 'Wheel Chair' in the Garmin IQ Connect Store (Diabetes/Dexcom/Diabetic only have two options. They both require the user to provide their Dexcom credentials.). 
 
-My goal is for one download & one positive review!
+My goal was for one download & one positive review!
 
 ## Credits
 
