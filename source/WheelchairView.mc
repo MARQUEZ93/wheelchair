@@ -4,6 +4,7 @@ import Toybox.System;
 import Toybox.WatchUi;
 import Toybox.Activity;
 import Toybox.ActivityMonitor;
+import Toybox.Application;
 using Toybox.Time.Gregorian as Date;
 
 import DataProvider;
@@ -26,6 +27,7 @@ class WheelchairView extends WatchUi.WatchFace {
     private var config;
     // settings
     private var ringColor;
+    private var ringWidth;
 
     function initialize() {
         WatchFace.initialize();
@@ -74,7 +76,8 @@ class WheelchairView extends WatchUi.WatchFace {
         cloudyImage = Application.loadResource(Rez.Drawables.cloudy);
         thunderImage = Application.loadResource(Rez.Drawables.thunder);
 
-        ringColor = Application.getApp().getProperty("RingColor");
+        ringColor = Application.Properties.getValue("RingColor");
+        ringWidth = Application.Properties.getValue("RingWidth");
     }
     // Called when this View is brought to the foreground. Restore
     // the state of this View and prepare it to be shown. This includes
@@ -109,7 +112,7 @@ class WheelchairView extends WatchUi.WatchFace {
         var endAngle = 360;
         var attr = Graphics.ARC_COUNTER_CLOCKWISE;
         dc.setColor(ringColor, Graphics.COLOR_TRANSPARENT);
-        dc.setPenWidth(16); // Adjust the thickness of the ring
+        dc.setPenWidth(ringWidth);
         dc.drawArc(centerX, centerY, radius, attr, startAngle, endAngle);
     }
     private function drawDate(dc) {
