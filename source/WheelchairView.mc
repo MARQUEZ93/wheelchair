@@ -24,6 +24,8 @@ class WheelchairView extends WatchUi.WatchFace {
     private var thunderImage;
     // configuration for different devices
     private var config;
+    // settings
+    private var ringColor;
 
     function initialize() {
         WatchFace.initialize();
@@ -31,10 +33,14 @@ class WheelchairView extends WatchUi.WatchFace {
         // 390*390 for vivoactive + venu3s
         if ( deviceInfo != null && deviceInfo.screenWidth != null && deviceInfo.screenWidth == 390 ){
             config = {
-                "pushX" => -35,
+                "pushX" => -25,
                 "bluetoothX" => -10,
                 "temperatureX" => 0,
-                "heartX" => -5
+                "heartX" => -5,
+                "fontSize" => Graphics.FONT_SMALL,
+                "degreeOffset" => 0,
+                "fullBatteryOffset" => 0,
+                "pushIconSpacing" => 0
             };
         } else {
             // 454*454 for venu3
@@ -42,7 +48,11 @@ class WheelchairView extends WatchUi.WatchFace {
                 "pushX" => 0,
                 "bluetoothX" => 0,
                 "temperatureX" => 7,
-                "heartX" => 0
+                "heartX" => 0,
+                "fontSize" => Graphics.FONT_MEDIUM,
+                "degreeOffset" => 5,
+                "fullBatteryOffset" => -15,
+                "pushIconSpacing" => -30
             };
         }
     }
@@ -63,6 +73,8 @@ class WheelchairView extends WatchUi.WatchFace {
         snowyImage = Application.loadResource(Rez.Drawables.snow);
         cloudyImage = Application.loadResource(Rez.Drawables.cloudy);
         thunderImage = Application.loadResource(Rez.Drawables.thunder);
+
+        ringColor = Application.getApp().getProperty("RingColor");
     }
     // Called when this View is brought to the foreground. Restore
     // the state of this View and prepare it to be shown. This includes
@@ -96,7 +108,7 @@ class WheelchairView extends WatchUi.WatchFace {
         var startAngle = 0;
         var endAngle = 360;
         var attr = Graphics.ARC_COUNTER_CLOCKWISE;
-        dc.setColor(Graphics.COLOR_PURPLE, Graphics.COLOR_TRANSPARENT);
+        dc.setColor(ringColor, Graphics.COLOR_TRANSPARENT);
         dc.setPenWidth(16); // Adjust the thickness of the ring
         dc.drawArc(centerX, centerY, radius, attr, startAngle, endAngle);
     }
@@ -107,7 +119,7 @@ class WheelchairView extends WatchUi.WatchFace {
         dc.drawText(
             screenWidth / 2,
             72,
-            Graphics.FONT_SMALL,
+            config.get("fontSize"),
             dateString,
             Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
         );
@@ -134,14 +146,14 @@ class WheelchairView extends WatchUi.WatchFace {
         dc.drawText(
             x+10,
             y,
-            Graphics.FONT_SMALL,
+            config.get("fontSize"),
             tempString,
             Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
         );
         dc.drawText(
-            x + edgeCase + 30,
+            x + edgeCase + 30 + config.get("degreeOffset"),
             y,
-            Graphics.FONT_SMALL,
+            config.get("fontSize"),
             degreeSymbol,
             Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER
         );
@@ -214,7 +226,7 @@ class WheelchairView extends WatchUi.WatchFace {
         var battery = DataProvider.getBatteryLevel();
         var edgeCase = 0;
         if (battery == 100) {
-            edgeCase = -10;
+            edgeCase = -10 + config.get("fullBatteryOffset");
         }
         var batteryText = battery.format("%d") + "\u0025";
         var bluetoothState = DataProvider.getBluetoothStatus();
@@ -262,7 +274,7 @@ class WheelchairView extends WatchUi.WatchFace {
         dc.drawText(
             text_x,
             text_y,
-            Graphics.FONT_SMALL,
+            config.get("fontSize"),
             batteryText,
             Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER // Left justify and vertically center
         );
@@ -327,7 +339,7 @@ class WheelchairView extends WatchUi.WatchFace {
         dc.drawText(
             x + edgeCase + 37 + config.get("heartX"),
             y-2,
-            Graphics.FONT_SMALL,
+            config.get("fontSize"),
             heartRate == 0 ? "N/A" : heartRate.format("%d"),
             Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER // Changed to center justify
         );
@@ -335,11 +347,14 @@ class WheelchairView extends WatchUi.WatchFace {
     private function drawPushes(dc) {
         var pushes = DataProvider.getPushes();
         var edgeCase = 0;
+        var pushImageEdgeCase = 0;
         if (pushes != null && pushes > 10000.0){
-            edgeCase = -8;
+            edgeCase = 0;
             if (pushes > 100000.0){
                 edgeCase = -16;
             }
+        } else if (pushes != null && pushes < 10000.0) {
+            pushImageEdgeCase = 10;
         }
         var pushesInK = pushes / 1000.0;
         var formattedPushes = pushesInK.format("%.1f") + "K";
@@ -350,19 +365,19 @@ class WheelchairView extends WatchUi.WatchFace {
         var angle_deg = 225; // 2:45 PM, symmetrical to 225 degrees for heart
         var angle_rad = angle_deg * (Math.PI / 180);
         var radius = screenWidth / 2;
-        var x = screenWidth / 2 + radius * Math.cos(angle_rad) + 255 + config.get("pushX");
+        var x = screenWidth / 2 + radius * Math.cos(angle_rad) + 245 + config.get("pushX") + edgeCase;
         var y = screenHeight / 2 - radius * Math.sin(angle_rad) - 37;
         var imgWidth = pushesImage.getWidth();
         // Draw the pushes image to the left of the text
         dc.drawBitmap(
-            x - imgWidth + edgeCase - 36, 
+            x - imgWidth - 36 + config.get("pushIconSpacing") + pushImageEdgeCase, 
             y - 17,
             pushesImage
         );
         dc.drawText(
             x + 12,
             y,
-            Graphics.FONT_SMALL,
+            config.get("fontSize"),
             formattedPushes,
             Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
         );
