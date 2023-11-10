@@ -1,13 +1,8 @@
 # A Wheelchair Watchface for Garmin Devices
 
-## Watchface Availability
+## Garmin Connect IQ Store
 
-The Wheelchair Watchface for Garmin Devices is now available for download. Get it here: [Garmin Connect IQ Store](https://apps.garmin.com/en-US/apps/d8257408-647d-410f-adcb-bfcde86541a0). Your feedback and reviews are highly appreciated and will help in improving the watchface further.
-
-## Development
-
-This project was developed using Visual Studio Code with the [Monkey C VS Code extension](https://developer.garmin.com/connect-iq/reference-guides/visual-studio-code-extension/). Extensive testing and simulations were carried out using the CIQ Simulator. This setup provided an efficient and reliable development environment, enabling me to tackle various challenges and ensure compatibility with the compatible Garmin devices.
-
+The Wheelchair Watchface for Garmin Devices is available here: [Garmin Connect IQ Store](https://apps.garmin.com/en-US/apps/d8257408-647d-410f-adcb-bfcde86541a0). Your feedback and reviews are highly appreciated.
 
 ## Compatible Devices (Since API Level 4.2.3)
 
@@ -43,6 +38,10 @@ While looking over API Documentation, I noticed the [pushDistance](https://devel
 ## Credits
 
 - [Kai Hao](https://kaihao.dev/posts/Develop-a-Garmin-watch-face)
+
+## Development
+
+This project was developed using Visual Studio Code with the [Monkey C VS Code extension](https://developer.garmin.com/connect-iq/reference-guides/visual-studio-code-extension/). Testing was done via the CIQ Simulator.
 
 ## Contact
 
