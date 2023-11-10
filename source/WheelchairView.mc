@@ -17,6 +17,7 @@ class WheelchairView extends WatchUi.WatchFace {
     private var connectedImage;
     private var disconnectedImage;
     private var heartImage;
+    private var notificationImage;
     // forecast images
     private var sunnyImage;
     private var rainyImage;
