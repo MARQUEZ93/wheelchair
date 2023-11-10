@@ -19,4 +19,17 @@
         </settingConfig>
     </setting>
 
+    <setting propertyKey="@Properties.ShowNotifications" title="@Strings.ShowNotificationsTitle">
+        <settingConfig type="boolean"/>
+    </setting>
+
+    <setting propertyKey="@Properties.RingWidth" title="@Strings.RingWidthTitle">
+        <settingConfig type="list">
+            <listEntry value="4">@Strings.Four</listEntry>
+            <listEntry value="8">@Strings.Eight</listEntry>
+            <listEntry value="16">@Strings.OneSix</listEntry>
+            <listEntry value="24">@Strings.TwoFour</listEntry>
+        </settingConfig>
+    </setting>
+
 </settings>

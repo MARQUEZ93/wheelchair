@@ -17,4 +17,13 @@
     <string id="ColorPink">Pink</string>
     <string id="ColorPurple">Purple</string>
 
+    <string id="ShowNotificationsTitle">Show Notifications</string>
+
+    <string id="RingWidthTitle">Ring Width</string>
+
+    <string id="Four">4</string>
+    <string id="Eight">8</string>
+    <string id="OneSix">16</string>
+    <string id="TwoFour">24</string>
+
 </strings>
