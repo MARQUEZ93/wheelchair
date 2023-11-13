@@ -17,7 +17,7 @@ class WheelchairView extends WatchUi.WatchFace {
     private var connectedImage;
     private var disconnectedImage;
     private var heartImage;
-    private var notificationImage;
+    private var notificationsImage;
     // forecast images
     private var sunnyImage;
     private var rainyImage;
@@ -29,6 +29,7 @@ class WheelchairView extends WatchUi.WatchFace {
     // settings
     private var ringColor;
     private var ringWidth;
+    private var showNotifications;
 
     function initialize() {
         WatchFace.initialize();
@@ -70,6 +71,7 @@ class WheelchairView extends WatchUi.WatchFace {
         disconnectedImage = Application.loadResource(Rez.Drawables.disconnected);
         connectedImage = Application.loadResource(Rez.Drawables.connected);
         heartImage = Application.loadResource(Rez.Drawables.heart);
+        notificationsImage = Application.loadResource(Rez.Drawables.notifications);
         // forecast images
         sunnyImage = Application.loadResource(Rez.Drawables.sunny);
         rainyImage = Application.loadResource(Rez.Drawables.rain);
@@ -79,6 +81,8 @@ class WheelchairView extends WatchUi.WatchFace {
 
         ringColor = Application.Properties.getValue("RingColor");
         ringWidth = Application.Properties.getValue("RingWidth");
+
+        showNotifications = Application.Properties.getValue("ShowNotifications");
     }
     // Called when this View is brought to the foreground. Restore
     // the state of this View and prepare it to be shown. This includes
@@ -96,6 +100,7 @@ class WheelchairView extends WatchUi.WatchFace {
         drawTime(dc);
         drawBatteryBluetooth(dc);
         drawWeather(dc);
+        drawNotifications(dc);
     }
     // Called when this View is removed from the screen. Save the
     // state of this View here. This includes freeing resources from
@@ -383,6 +388,38 @@ class WheelchairView extends WatchUi.WatchFace {
             y,
             config.get("fontSize"),
             formattedPushes,
+            Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
+        );
+    }
+
+    private function drawNotifications(dc) {
+        if (!showNotifications){
+            return;
+        }
+        var spacing = 0;
+        var notifications = DataProvider.getNotifications();
+        if (notifications != null && notifications > 9) {
+            spacing = 10;
+        }
+        dc.setColor(
+            Graphics.COLOR_LT_GRAY,
+            Graphics.COLOR_TRANSPARENT
+        );
+        var angle_deg = 225; // 2:45 PM, symmetrical to 225 degrees for heart
+        var x = screenWidth / 2; // Centered horizontally
+        var y = screenHeight / 2 + 180;
+        var imgWidth = notificationsImage.getWidth();
+        // Draw the notifications image to the left of the text
+        dc.drawBitmap(
+            x - imgWidth, 
+            y-15,
+            notificationsImage
+        );
+        dc.drawText(
+            x + 28 + spacing,
+            y,
+            config.get("fontSize"),
+            notifications,
             Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
         );
     }

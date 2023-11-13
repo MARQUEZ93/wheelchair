@@ -9,4 +9,5 @@
     <bitmap id="thunder" filename="icons/thunder.png"/>
     <bitmap id="cloudy" filename="icons/cloudy.png"/>
     <bitmap id="snow" filename="icons/snow.png"/>
+    <bitmap id="notifications" filename="icons/notifications.png"/>
 </drawables>

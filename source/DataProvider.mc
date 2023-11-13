@@ -61,4 +61,9 @@ module DataProvider {
         }
         return null; 
     }
+    function getNotifications() {
+        var mySettings = System.getDeviceSettings();
+        var notificationCount = mySettings.notificationCount;
+        return notificationCount;
+    }
 }
