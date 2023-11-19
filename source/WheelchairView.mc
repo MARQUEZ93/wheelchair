@@ -37,16 +37,16 @@ class WheelchairView extends WatchUi.WatchFace {
         // 390*390 for vivoactive + venu3s
         if ( deviceInfo != null && deviceInfo.screenWidth != null && deviceInfo.screenWidth == 390 ){
             config = {
-                "pushX" => -25,
-                "bluetoothX" => -10,
-                "temperatureX" => 0,
+                "pushX" => -32,
+                "bluetoothX" => -9,
+                "temperatureX" => -5,
                 "heartX" => -5,
                 "fontSize" => Graphics.FONT_SMALL,
                 "degreeOffset" => 0,
                 "fullBatteryOffset" => 0,
-                "pushIconSpacing" => 0,
-                "forecastX" => 0,
-                "notificationsY" => 0,
+                "pushIconSpacing" => -10,
+                "forecastX" => -7,
+                "notificationsY" => -25,
             };
         } else {
             // 454*454 for venu3
