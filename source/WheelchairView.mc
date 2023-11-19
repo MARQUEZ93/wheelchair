@@ -46,6 +46,7 @@ class WheelchairView extends WatchUi.WatchFace {
                 "fullBatteryOffset" => 0,
                 "pushIconSpacing" => 0,
                 "forecastX" => 0,
+                "notificationsY" => 0,
             };
         } else {
             // 454*454 for venu3
@@ -59,6 +60,7 @@ class WheelchairView extends WatchUi.WatchFace {
                 "fullBatteryOffset" => -15,
                 "pushIconSpacing" => -30,
                 "forecastX" => -5,
+                "notificationsY" => -5,
             };
         }
     }
@@ -405,22 +407,25 @@ class WheelchairView extends WatchUi.WatchFace {
         if (notifications != null && notifications > 9) {
             spacing = 10;
         }
+        if (notifications != null && notifications > 99) {
+            spacing = 20;
+        }
         dc.setColor(
             Graphics.COLOR_LT_GRAY,
             Graphics.COLOR_TRANSPARENT
         );
         var angle_deg = 225; // 2:45 PM, symmetrical to 225 degrees for heart
         var x = screenWidth / 2; // Centered horizontally
-        var y = screenHeight / 2 + 180;
+        var y = screenHeight / 2 + 180 + config.get("notificationsY");
         var imgWidth = notificationsImage.getWidth();
         // Draw the notifications image to the left of the text
         dc.drawBitmap(
-            x - imgWidth, 
+            x - imgWidth - spacing, 
             y-15,
             notificationsImage
         );
         dc.drawText(
-            x + 28 + spacing,
+            x + 28,
             y,
             config.get("fontSize"),
             notifications,

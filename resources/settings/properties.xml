@@ -1,5 +1,5 @@
 <properties>
     <property id="RingColor" type="number">0xAA00FF</property>
-    <property id="ShowNotifications" type="boolean">false</property>
+    <property id="ShowNotifications" type="boolean">true</property>
     <property id="RingWidth" type="number">16</property>
 </properties>
