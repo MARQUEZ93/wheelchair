@@ -44,19 +44,21 @@ class WheelchairView extends WatchUi.WatchFace {
                 "fontSize" => Graphics.FONT_SMALL,
                 "degreeOffset" => 0,
                 "fullBatteryOffset" => 0,
-                "pushIconSpacing" => 0
+                "pushIconSpacing" => 0,
+                "forecastX" => 0,
             };
         } else {
             // 454*454 for venu3
             config = {
                 "pushX" => 0,
-                "bluetoothX" => 0,
+                "bluetoothX" => 5,
                 "temperatureX" => 7,
                 "heartX" => 0,
                 "fontSize" => Graphics.FONT_MEDIUM,
                 "degreeOffset" => 5,
                 "fullBatteryOffset" => -15,
-                "pushIconSpacing" => -30
+                "pushIconSpacing" => -30,
+                "forecastX" => -5,
             };
         }
     }
@@ -140,8 +142,10 @@ class WheelchairView extends WatchUi.WatchFace {
     private function drawTemperature(dc) {
         var edgeCase = 0;
         var temperature = DataProvider.getTemperature();
+        var degreeOffset100 = 0;
         if (temperature != null && temperature >= 100) {
             edgeCase = 10;
+            degreeOffset100 = 5;
         }
         var tempString = (temperature == null) ? "N/A" : temperature.format("%d");
         var degreeSymbol = (temperature == null) ? "" : "°";
@@ -160,7 +164,7 @@ class WheelchairView extends WatchUi.WatchFace {
             Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
         );
         dc.drawText(
-            x + edgeCase + 30 + config.get("degreeOffset"),
+            x + edgeCase + 30 + config.get("degreeOffset") + degreeOffset100,
             y,
             config.get("fontSize"),
             degreeSymbol,
@@ -223,7 +227,7 @@ class WheelchairView extends WatchUi.WatchFace {
         var angle_deg = 155;
         var angle_rad = angle_deg * (Math.PI / 180);
         var radius = screenWidth / 2;
-        var x = screenWidth / 2 + radius * Math.cos(angle_rad) + 25; 
+        var x = screenWidth / 2 + radius * Math.cos(angle_rad) + 25 + config.get("forecastX"); 
         var y = screenHeight / 2 - radius * Math.sin(angle_rad) + 10;
         dc.drawBitmap(
             x,
