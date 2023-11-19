@@ -34,7 +34,7 @@ This is sad (I reached out to both Dexcom & Garmin. Received no response).
 
 Irregardless, I spent too much time w/ the Garmin SDK to not publish something. 
 
-While looking over API Documentation, I noticed the [pushDistance](https://developer.garmin.com/connect-iq/api-docs/Toybox/ActivityMonitor/Info.html#pushDistance-var) field. I found zero results for 'Wheelchair' or 'Wheel Chair' in the Garmin IQ Connect Store.
+While looking over API Documentation to resolve my Dexcom Data Field problem, I noticed the [pushDistance](https://developer.garmin.com/connect-iq/api-docs/Toybox/ActivityMonitor/Info.html#pushDistance-var) field. I found zero results for 'Wheelchair' or 'Wheel Chair' in the Garmin IQ Connect Store.
 
 ## Credits
 
