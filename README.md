@@ -2,7 +2,7 @@
 
 ## Garmin Connect IQ Store
 
-The Wheelchair Watchface for Garmin Devices is available here: [Garmin Connect IQ Store](https://apps.garmin.com/en-US/apps/d8257408-647d-410f-adcb-bfcde86541a0).
+The Wheelchair Watchface for Garmin Devices is available here: [Garmin Connect IQ Store](https://apps.garmin.com/en-US/apps/d8257408-647d-410f-adcb-bfcde86541a0)
 
 ## Compatible Devices (Since API Level 4.2.3)
 
@@ -48,4 +48,4 @@ This project was developed using Visual Studio Code with the [Monkey C VS Code e
 
 showmethecodevideos@gmail.com
 
-Email me any bugs, edge cases not handled, improvements etc. Provide as much detail as possible + a photo of your Garmin screen. I rely on the CIQ Simulator for testing different devices.
+Email me any improvements and/or edge cases not handled etc. I rely on the CIQ Simulator for testing different devices.
