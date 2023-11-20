@@ -414,7 +414,6 @@ class WheelchairView extends WatchUi.WatchFace {
             Graphics.COLOR_LT_GRAY,
             Graphics.COLOR_TRANSPARENT
         );
-        var angle_deg = 225; // 2:45 PM, symmetrical to 225 degrees for heart
         var x = screenWidth / 2; // Centered horizontally
         var y = screenHeight / 2 + 180 + config.get("notificationsY");
         var imgWidth = notificationsImage.getWidth();
