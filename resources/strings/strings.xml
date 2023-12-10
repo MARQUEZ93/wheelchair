@@ -18,6 +18,8 @@
     <string id="ColorPurple">Purple</string>
 
     <string id="ShowNotificationsTitle">Show Notifications</string>
+    <string id="CelsiusTitle">Celsius</string>
+    <string id="TwentyFourTimeTitle">24 Hour Time</string>
 
     <string id="RingWidthTitle">Ring Width</string>
 

@@ -30,6 +30,8 @@ class WheelchairView extends WatchUi.WatchFace {
     private var ringColor;
     private var ringWidth;
     private var showNotifications;
+    private var celsius;
+    private var twentyFourTime;
 
     function initialize() {
         WatchFace.initialize();
@@ -87,6 +89,9 @@ class WheelchairView extends WatchUi.WatchFace {
         ringWidth = Application.Properties.getValue("RingWidth");
 
         showNotifications = Application.Properties.getValue("ShowNotifications");
+
+        celsius = Application.Properties.getValue("Celsius");
+        twentyFourTime = Application.Properties.getValue("TwentyFourTime");
     }
     // Called when this View is brought to the foreground. Restore
     // the state of this View and prepare it to be shown. This includes
@@ -143,7 +148,7 @@ class WheelchairView extends WatchUi.WatchFace {
     }
     private function drawTemperature(dc) {
         var edgeCase = 0;
-        var temperature = DataProvider.getTemperature();
+        var temperature = DataProvider.getTemperature(celsius);
         var degreeOffset100 = 0;
         if (temperature != null && temperature >= 100) {
             edgeCase = 10;
@@ -305,18 +310,20 @@ class WheelchairView extends WatchUi.WatchFace {
     private function drawTime(dc) {
         var clockTime = DataProvider.getCurrentTime();
         var hours = clockTime.hour;
-        if (hours > 12) {
-            hours -= 12;
+        var displayHour; // Variable to hold the hour to display
+        if (twentyFourTime){
+            displayHour = hours; // In 24-hour format, display the hour as is
+        } else {
+            // For 12-hour format
+            if (hours == 0) {
+                displayHour = 12; // Midnight
+            } else if (hours > 12) {
+                displayHour = hours - 12; // Convert 13-23 hours to 1-11 PM
+            } else {
+                displayHour = hours; // 1-11 AM and Noon as is
+            }
         }
-        if (hours == 0) {
-            hours = 12;
-        }
-        clockTime = System.getClockTime();
-        var hour12 = clockTime.hour % 12;
-        if (hour12 == 0) {
-            hour12 = 12;
-        }
-        var timeString = Lang.format("$1$:$2$", [hour12.format("%d"), clockTime.min.format("%02d")]);
+        var timeString = Lang.format("$1$:$2$", [displayHour.format("%d"), clockTime.min.format("%02d")]);
         var x = screenWidth / 2; // Centered horizontally
         var y = screenHeight / 2 + 20;
         dc.setColor(Graphics.COLOR_LT_GRAY, Graphics.COLOR_TRANSPARENT);
@@ -404,6 +411,9 @@ class WheelchairView extends WatchUi.WatchFace {
         }
         var spacing = 0;
         var notifications = DataProvider.getNotifications();
+        if (notifications == 0){
+            return;
+        }
         if (notifications != null && notifications > 9) {
             spacing = 10;
         }

@@ -42,12 +42,15 @@ module DataProvider {
     function getCurrentDate() {
         return Date.info(Time.now(), Time.FORMAT_MEDIUM);
     }
-    function getTemperature() {
+    function getTemperature(celsius) {
         var conditions = Weather.getCurrentConditions();
         if (conditions != null) {
             var tempCelsius = conditions.temperature;
             if (tempCelsius == null) {
                 return null;
+            }
+            if (celsius) {
+                return tempCelsius;
             }
             var tempFahrenheit = (tempCelsius * 9/5) + 32;
             return tempFahrenheit;

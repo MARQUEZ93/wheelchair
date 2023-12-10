@@ -2,4 +2,6 @@
     <property id="RingColor" type="number">0xAA00FF</property>
     <property id="ShowNotifications" type="boolean">true</property>
     <property id="RingWidth" type="number">16</property>
+    <property id="Celsius" type="boolean">false</property>
+    <property id="TwentyFourTime" type="boolean">false</property>
 </properties>

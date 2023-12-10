@@ -23,6 +23,14 @@
         <settingConfig type="boolean"/>
     </setting>
 
+    <setting propertyKey="@Properties.Celsius" title="@Strings.CelsiusTitle">
+        <settingConfig type="boolean"/>
+    </setting>
+
+    <setting propertyKey="@Properties.TwentyFourTime" title="@Strings.TwentyFourTimeTitle">
+        <settingConfig type="boolean"/>
+    </setting>
+
     <setting propertyKey="@Properties.RingWidth" title="@Strings.RingWidthTitle">
         <settingConfig type="list">
             <listEntry value="4">@Strings.Four</listEntry>
