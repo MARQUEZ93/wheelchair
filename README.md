@@ -22,6 +22,18 @@ Per [Garmin documentation](https://developer.garmin.com/connect-iq/api-docs/Toyb
 - 📶 Bluetooth Connection Status
 - ♿ Today's Pushes
 - 🔔 Notifications 
+- 🌡️ Temperature (Fahrenheit/Celsius)
+- ⛅ Forecast
+
+## Settings
+
+Users can customize the watch face through the Garmin Connect Mobile App. The available settings include:
+
+- **Time Format**: Choose between 12-hour and 24-hour formats.
+- **Temperature Format**: Select Fahrenheit or Celsius.
+- **Show Notifications**: Toggle to turn notifications On or Off.
+- **Ring Color**: Pick a color using the Color Picker.
+- **Ring Width**: Adjust the width using a Slider.
 
 ## Origin
 
