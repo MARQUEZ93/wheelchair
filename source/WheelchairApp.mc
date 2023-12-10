@@ -4,6 +4,8 @@ import Toybox.WatchUi;
 
 class WheelchairApp extends Application.AppBase {
 
+    var view = null;
+
     function initialize() {
         AppBase.initialize();
     }
@@ -16,7 +18,15 @@ class WheelchairApp extends Application.AppBase {
 
     // Return the initial view of your application here
     function getInitialView() as Array<Views or InputDelegates>? {
-        return [ new WheelchairView() ] as Array<Views or InputDelegates>;
+        view= new WheelchairView();
+        return [ view ] as Array<Views or InputDelegates>;
+    }
+
+    function onSettingsChanged() {
+        if(view!=null) {
+            view.load();
+            WatchUi.requestUpdate();
+        }
     }
 
 }

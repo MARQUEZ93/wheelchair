@@ -35,6 +35,7 @@ class WheelchairView extends WatchUi.WatchFace {
 
     function initialize() {
         WatchFace.initialize();
+        load(); //read settings
         var deviceInfo = System.getDeviceSettings();
         // 390*390 for vivoactive + venu3s
         if ( deviceInfo != null && deviceInfo.screenWidth != null && deviceInfo.screenWidth == 390 ){
@@ -84,14 +85,6 @@ class WheelchairView extends WatchUi.WatchFace {
         snowyImage = Application.loadResource(Rez.Drawables.snow);
         cloudyImage = Application.loadResource(Rez.Drawables.cloudy);
         thunderImage = Application.loadResource(Rez.Drawables.thunder);
-
-        ringColor = Application.Properties.getValue("RingColor");
-        ringWidth = Application.Properties.getValue("RingWidth");
-
-        showNotifications = Application.Properties.getValue("ShowNotifications");
-
-        celsius = Application.Properties.getValue("Celsius");
-        twentyFourTime = Application.Properties.getValue("TwentyFourTime");
     }
     // Called when this View is brought to the foreground. Restore
     // the state of this View and prepare it to be shown. This includes
@@ -440,5 +433,12 @@ class WheelchairView extends WatchUi.WatchFace {
             notifications,
             Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
         );
+    }
+    function load(){
+        ringColor = Application.Properties.getValue("RingColor");
+        ringWidth = Application.Properties.getValue("RingWidth");
+        showNotifications = Application.Properties.getValue("ShowNotifications");
+        celsius = Application.Properties.getValue("Celsius");
+        twentyFourTime = Application.Properties.getValue("TwentyFourTime");
     }
 }
