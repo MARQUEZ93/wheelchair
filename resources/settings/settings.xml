@@ -31,7 +31,7 @@
         <settingConfig type="boolean"/>
     </setting>
 
-    <setting propertyKey="@Properties.MinMaxTime" title="@Strings.MinMaxTimeTitle">
+    <setting propertyKey="@Properties.MinMaxTemp" title="@Strings.MinMaxTempTitle">
         <settingConfig type="boolean"/>
     </setting>
 
