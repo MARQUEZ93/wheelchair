@@ -156,7 +156,6 @@ class WheelchairView extends WatchUi.WatchFace {
         var min = temperatures[0];
         var max = temperatures[1];
         var offSet = 0;
-        max = 102;
         if (max > 99 || min > 99){
             offSet = 7;
         }
@@ -165,7 +164,6 @@ class WheelchairView extends WatchUi.WatchFace {
             degreeSymbol = "";
             offSet = 10;
         }
-
         var minTempString = min.format("%d");
         var maxTempString = max.format("%d");
         var minMaxStrings = minTempString + degreeSymbol + "/" + maxTempString + degreeSymbol;
@@ -285,12 +283,14 @@ class WheelchairView extends WatchUi.WatchFace {
         var battery = DataProvider.getBatteryLevel();
         var edgeCase = 0;
         var batteryFontSize = config.get("fontSize");
+        var batteryOffset = 63;
         if (battery == 100) {
+            batteryOffset = 43;
             edgeCase = -10 + config.get("fullBatteryOffset");
             if (batteryFontSize == Graphics.FONT_SMALL){
-                batteryFontSize = Graphics.FONT_TINY;
+                batteryFontSize = Graphics.FONT_XTINY;
             } else if (batteryFontSize == Graphics.FONT_MEDIUM){
-                batteryFontSize = Graphics.FONT_SMALL;
+                batteryFontSize = Graphics.FONT_TINY;
             }
         }
         var batteryText = battery.format("%d") + "\u0025";
@@ -304,7 +304,7 @@ class WheelchairView extends WatchUi.WatchFace {
         var angle_deg = 60; // 2 PM on the clock in degrees
         var angle_rad = angle_deg * (Math.PI / 180);
         var radius = screenWidth / 4;
-        var x = screenWidth / 2 + radius * Math.cos(angle_rad) + edgeCase - 60;
+        var x = screenWidth / 2 + radius * Math.cos(angle_rad) + edgeCase - batteryOffset;
         var y = screenHeight / 2 - radius * Math.sin(angle_rad);
         dc.setPenWidth(2);
         dc.setColor(
