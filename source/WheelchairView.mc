@@ -33,7 +33,7 @@ class WheelchairView extends WatchUi.WatchFace {
     private var celsius;
     private var twentyFourTime;
 
-    private var minMaxTemp;
+    private var Temp;
     private var remainingDays;
 
     function initialize() {
@@ -139,8 +139,46 @@ class WheelchairView extends WatchUi.WatchFace {
         );
     }
     private function drawWeather(dc){
-        drawForecast(dc);
-        drawTemperature(dc);
+        if (minMaxTemp){
+            drawMinMaxTemperature(dc);
+        } else{
+            drawForecast(dc);
+            drawTemperature(dc);
+        }
+    }
+    private function drawMinMaxTemperature(dc) {
+        var temperatures = DataProvider.getDailyTemperature(celsius);
+        if (temperatures == null){
+            return null;
+        }
+        var min = temperatures[0];
+        var max = temperatures[1];
+
+        var minTempString = min.format("%d");
+        var maxTempString = max.format("%d");
+        var degreeSymbol = "°";
+        var angle_deg = 155; // 10:30 in degrees
+        var angle_rad = angle_deg * (Math.PI / 180);
+        var radius = screenWidth / 2;
+        
+        var x = screenWidth / 2 + radius * Math.cos(angle_rad) + 81 + config.get("temperatureX");
+        var y = screenHeight / 2 - radius * Math.sin(angle_rad) + 10;
+        dc.setColor(Graphics.COLOR_LT_GRAY, Graphics.COLOR_TRANSPARENT);
+        // Draw the degree symbol, with a manual offset
+        dc.drawText(
+            x+10,
+            y,
+            config.get("fontSize"),
+            tempString,
+            Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
+        );
+        dc.drawText(
+            x + edgeCase + 30 + config.get("degreeOffset") + degreeOffset100,
+            y,
+            config.get("fontSize"),
+            degreeSymbol,
+            Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER
+        );
     }
     private function drawTemperature(dc) {
         var edgeCase = 0;

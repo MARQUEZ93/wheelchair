@@ -32,6 +32,9 @@ module DataProvider {
     function getBatteryLevel() {
         return System.getSystemStats().battery;
     }
+    function getBatteryDays() {
+        return System.getSystemStats().batteryInDays;
+    }
     function getBluetoothStatus() {
         var deviceSettings = System.getDeviceSettings();
         return deviceSettings.connectionInfo[:bluetooth].state;
@@ -41,6 +44,27 @@ module DataProvider {
     }
     function getCurrentDate() {
         return Date.info(Time.now(), Time.FORMAT_MEDIUM);
+    }
+    function getDailyTemperature(celsius) {
+        var dailyForecast = Weather.getDailyForecast();
+        if (dailyForecast && dailyForecast.length > 0) {
+            var forecast = dailyForecast[0];
+            if (forecast != null) {
+                var low = forecast.lowTemperature;
+                var high = forecast.highTemperature;
+                if (low == null || high == null) {
+                    return null;
+                }   
+                if (celsius) {
+                    return [low, high];
+                } else{
+                    var lowFahrenheit = (low * 9/5) + 32;
+                    var highFahrenheit = (high * 9/5) + 32;
+                    return [lowFahrenheit, highFahrenheit];
+                }
+            }
+        }
+        return null; 
     }
     function getTemperature(celsius) {
         var conditions = Weather.getCurrentConditions();
