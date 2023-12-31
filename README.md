@@ -34,6 +34,8 @@ Users can customize the watch face through the Garmin Connect Mobile App. The av
 - **Show Notifications**: Toggle to turn notifications On or Off.
 - **Ring Color**: Pick a color using the Color Picker.
 - **Ring Width**: Adjust the width using a Slider.
+- **Min/Max Temperature Display**: Option to display daily minimum and maximum temperature readings.
+- **Ring Width**: Choose to display battery life in days remaining instead of a percentage.
 
 ## Origin
 

@@ -284,16 +284,24 @@ class WheelchairView extends WatchUi.WatchFace {
         var edgeCase = 0;
         var batteryFontSize = config.get("fontSize");
         var batteryOffset = 63;
-        if (battery == 100) {
-            batteryOffset = 43;
-            edgeCase = -10 + config.get("fullBatteryOffset");
-            if (batteryFontSize == Graphics.FONT_SMALL){
-                batteryFontSize = Graphics.FONT_XTINY;
-            } else if (batteryFontSize == Graphics.FONT_MEDIUM){
-                batteryFontSize = Graphics.FONT_TINY;
-            }
-        }
         var batteryText = battery.format("%d") + "\u0025";
+        if (battery == 100) {
+            if (!remainingDays){
+                batteryOffset = 43;
+                edgeCase = -10 + config.get("fullBatteryOffset");
+                if (batteryFontSize == Graphics.FONT_SMALL){
+                    batteryFontSize = Graphics.FONT_XTINY;
+                } else if (batteryFontSize == Graphics.FONT_MEDIUM){
+                    batteryFontSize = Graphics.FONT_TINY;
+                }
+            } 
+        }
+        if (remainingDays){
+            var days = DataProvider.getBatteryDays();
+            batteryText = days.format("%d") + "d";
+            batteryOffset = 33;
+        }
+
         var bluetoothState = DataProvider.getBluetoothStatus();
         // Check if connected
         var isConnected = (bluetoothState == 2); // Or use the appropriate enum if available
