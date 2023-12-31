@@ -21,6 +21,9 @@
     <string id="CelsiusTitle">Celsius</string>
     <string id="TwentyFourTimeTitle">24 Hour Time</string>
 
+    <string id="MinMaxTitle">Show Min/Max Temperature</string>
+    <string id="RemainingDaysTitle">Show Remaining Battery Days</string>
+
     <string id="RingWidthTitle">Ring Width</string>
 
     <string id="Four">4</string>

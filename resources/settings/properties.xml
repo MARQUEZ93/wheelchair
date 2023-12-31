@@ -4,4 +4,6 @@
     <property id="RingWidth" type="number">16</property>
     <property id="Celsius" type="boolean">false</property>
     <property id="TwentyFourTime" type="boolean">false</property>
+    <property id="MinMaxTime" type="boolean">false</property>
+    <property id="RemainingDays" type="boolean">false</property>
 </properties>

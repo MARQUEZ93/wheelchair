@@ -31,6 +31,14 @@
         <settingConfig type="boolean"/>
     </setting>
 
+    <setting propertyKey="@Properties.MinMaxTime" title="@Strings.MinMaxTimeTitle">
+        <settingConfig type="boolean"/>
+    </setting>
+
+    <setting propertyKey="@Properties.RemainingDays" title="@Strings.RemainingDaysTitle">
+        <settingConfig type="boolean"/>
+    </setting>
+
     <setting propertyKey="@Properties.RingWidth" title="@Strings.RingWidthTitle">
         <settingConfig type="list">
             <listEntry value="4">@Strings.Four</listEntry>
