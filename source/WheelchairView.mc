@@ -363,16 +363,23 @@ class WheelchairView extends WatchUi.WatchFace {
         var pushes = DataProvider.getPushes();
         var edgeCase = 0;
         var pushImageEdgeCase = 0;
+        var moreThan10K = false;
         if (pushes != null && pushes > 10000.0){
             edgeCase = 0;
             if (pushes > 100000.0){
-                edgeCase = -16;
+                edgeCase = -8;
+                moreThan10K = true;
             }
         } else if (pushes != null && pushes < 10000.0) {
             pushImageEdgeCase = 10;
         }
         var pushesInK = pushes / 1000.0;
-        var formattedPushes = pushesInK.format("%.1f") + " K";
+        var formattedPushes;
+        if (moreThan10K){
+            formattedPushes = pushesInK.format("%.0f") + " K";
+        } else {
+            formattedPushes = pushesInK.format("%.1f") + " K";
+        }
         dc.setColor(
             pushes > 10000 ? Graphics.COLOR_DK_GREEN : Graphics.COLOR_LT_GRAY,
             Graphics.COLOR_TRANSPARENT
