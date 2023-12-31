@@ -43,8 +43,7 @@
         <settingConfig type="list">
             <listEntry value="4">@Strings.Four</listEntry>
             <listEntry value="8">@Strings.Eight</listEntry>
-            <listEntry value="16">@Strings.OneSix</listEntry>
-            <listEntry value="20">@Strings.TwoZero</listEntry>
+            <listEntry value="12">@Strings.Twelve</listEntry>
         </settingConfig>
     </setting>
 

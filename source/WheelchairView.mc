@@ -33,7 +33,7 @@ class WheelchairView extends WatchUi.WatchFace {
     private var celsius;
     private var twentyFourTime;
 
-    private var Temp;
+    private var minMaxTemp;
     private var remainingDays;
 
     function initialize() {
@@ -53,6 +53,7 @@ class WheelchairView extends WatchUi.WatchFace {
                 "pushIconSpacing" => -10,
                 "forecastX" => -7,
                 "notificationsY" => -25,
+                "minMaxSize" => Graphics.FONT_TINY,
             };
         } else {
             // 454*454 for venu3
@@ -67,6 +68,7 @@ class WheelchairView extends WatchUi.WatchFace {
                 "pushIconSpacing" => -30,
                 "forecastX" => -5,
                 "notificationsY" => -5,
+                "minMaxSize" => Graphics.FONT_SMALL,
             };
         }
     }
@@ -147,37 +149,40 @@ class WheelchairView extends WatchUi.WatchFace {
         }
     }
     private function drawMinMaxTemperature(dc) {
-        var temperatures = DataProvider.getDailyTemperature(celsius);
+        var temperatures = DataProvider.getMinMaxTemperatures(celsius);
         if (temperatures == null){
-            return null;
+            return;
         }
         var min = temperatures[0];
         var max = temperatures[1];
+        var offSet = 0;
+        max = 102;
+        if (max > 99 || min > 99){
+            offSet = 7;
+        }
+        var degreeSymbol = "°";
+        if (min > 99){
+            degreeSymbol = "";
+            offSet = 10;
+        }
 
         var minTempString = min.format("%d");
         var maxTempString = max.format("%d");
-        var degreeSymbol = "°";
+        var minMaxStrings = minTempString + degreeSymbol + "/" + maxTempString + degreeSymbol;
         var angle_deg = 155; // 10:30 in degrees
         var angle_rad = angle_deg * (Math.PI / 180);
         var radius = screenWidth / 2;
-        
-        var x = screenWidth / 2 + radius * Math.cos(angle_rad) + 81 + config.get("temperatureX");
+
+        var x = screenWidth / 2 + radius * Math.cos(angle_rad) + 80 + config.get("temperatureX") + offSet;
         var y = screenHeight / 2 - radius * Math.sin(angle_rad) + 10;
+
         dc.setColor(Graphics.COLOR_LT_GRAY, Graphics.COLOR_TRANSPARENT);
-        // Draw the degree symbol, with a manual offset
         dc.drawText(
-            x+10,
+            x,
             y,
-            config.get("fontSize"),
-            tempString,
+            config.get("minMaxSize"),
+            minMaxStrings,
             Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
-        );
-        dc.drawText(
-            x + edgeCase + 30 + config.get("degreeOffset") + degreeOffset100,
-            y,
-            config.get("fontSize"),
-            degreeSymbol,
-            Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER
         );
     }
     private function drawTemperature(dc) {
@@ -279,8 +284,14 @@ class WheelchairView extends WatchUi.WatchFace {
     private function drawBatteryBluetooth(dc) {
         var battery = DataProvider.getBatteryLevel();
         var edgeCase = 0;
+        var batteryFontSize = config.get("fontSize");
         if (battery == 100) {
             edgeCase = -10 + config.get("fullBatteryOffset");
+            if (batteryFontSize == Graphics.FONT_SMALL){
+                batteryFontSize = Graphics.FONT_TINY;
+            } else if (batteryFontSize == Graphics.FONT_MEDIUM){
+                batteryFontSize = Graphics.FONT_SMALL;
+            }
         }
         var batteryText = battery.format("%d") + "\u0025";
         var bluetoothState = DataProvider.getBluetoothStatus();
@@ -293,7 +304,7 @@ class WheelchairView extends WatchUi.WatchFace {
         var angle_deg = 60; // 2 PM on the clock in degrees
         var angle_rad = angle_deg * (Math.PI / 180);
         var radius = screenWidth / 4;
-        var x = screenWidth / 2 + radius * Math.cos(angle_rad) + edgeCase - 70;
+        var x = screenWidth / 2 + radius * Math.cos(angle_rad) + edgeCase - 60;
         var y = screenHeight / 2 - radius * Math.sin(angle_rad);
         dc.setPenWidth(2);
         dc.setColor(
@@ -328,7 +339,7 @@ class WheelchairView extends WatchUi.WatchFace {
         dc.drawText(
             text_x,
             text_y,
-            config.get("fontSize"),
+            batteryFontSize,
             batteryText,
             Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER // Left justify and vertically center
         );
