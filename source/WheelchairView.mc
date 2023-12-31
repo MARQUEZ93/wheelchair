@@ -372,7 +372,7 @@ class WheelchairView extends WatchUi.WatchFace {
             pushImageEdgeCase = 10;
         }
         var pushesInK = pushes / 1000.0;
-        var formattedPushes = pushesInK.format("%.1f") + "K";
+        var formattedPushes = pushesInK.format("%.1f") + " K";
         dc.setColor(
             pushes > 10000 ? Graphics.COLOR_DK_GREEN : Graphics.COLOR_LT_GRAY,
             Graphics.COLOR_TRANSPARENT
@@ -380,7 +380,7 @@ class WheelchairView extends WatchUi.WatchFace {
         var angle_deg = 225; // 2:45 PM, symmetrical to 225 degrees for heart
         var angle_rad = angle_deg * (Math.PI / 180);
         var radius = screenWidth / 2;
-        var x = screenWidth / 2 + radius * Math.cos(angle_rad) + 245 + config.get("pushX") + edgeCase;
+        var x = screenWidth / 2 + radius * Math.cos(angle_rad) + 230 + config.get("pushX") + edgeCase;
         var y = screenHeight / 2 - radius * Math.sin(angle_rad) - 37;
         var imgWidth = pushesImage.getWidth();
         // Draw the pushes image to the left of the text
