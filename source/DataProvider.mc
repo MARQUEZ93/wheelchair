@@ -45,20 +45,34 @@ module DataProvider {
     function getCurrentDate() {
         return Date.info(Time.now(), Time.FORMAT_MEDIUM);
     }
-    function getMinMaxTemperatures(celsius) {
+    function getMinTemperature(celsius) {
         var conditions = Weather.getCurrentConditions();
         if (conditions != null) {
             var low = conditions.lowTemperature;
-            var high = conditions.highTemperature;
-            if (low == null || high == null) {
+            if (low == null) {
                 return null;
             }  
             if (celsius) {
-                return [low, high];
+                return low;
             } else {
-                var lowF = (low * 9/5) + 32;
-                var highF = (high * 9/5) + 32;
-                return [lowF, highF];
+                var lowFarenheit = (low * 9/5) + 32;
+                return lowFarenheit;
+            }
+        }
+        return null; 
+    }
+    function getMaxTemperature(celsius) {
+        var conditions = Weather.getCurrentConditions();
+        if (conditions != null) {
+            var max = conditions.highTemperature;
+            if (max == null) {
+                return null;
+            }  
+            if (celsius) {
+                return max;
+            } else {
+                var maxFarenheit = (max * 9/5) + 32;
+                return maxFarenheit;
             }
         }
         return null; 

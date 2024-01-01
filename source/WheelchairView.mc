@@ -150,12 +150,11 @@ class WheelchairView extends WatchUi.WatchFace {
         }
     }
     private function drawMinMaxTemperature(dc) {
-        var temperatures = DataProvider.getMinMaxTemperatures(celsius);
-        if (temperatures == null){
+        var min = DataProvider.getMinTemperature(celsius);
+        var max = DataProvider.getMaxTemperature(celsius);
+        if (min == null || max == null){
             return;
         }
-        var min = temperatures[0];
-        var max = temperatures[1];
         var offSet = 0;
         if (max > 99 || min > 99){
             offSet = 7;

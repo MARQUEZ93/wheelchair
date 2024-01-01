@@ -36,6 +36,7 @@ Users can customize the watch face through the Garmin Connect Mobile App. The av
 - **Ring Width**: Adjust the width using a Slider.
 - **Min/Max Temperature Display**: Option to display daily minimum and maximum temperature readings.
 - **Ring Width**: Choose to display battery life in days remaining instead of a percentage.
+- **Push Design**: Choose to display simpler push design (no temperature, no forecast, emphasis on push count).
 
 ## Origin
 
