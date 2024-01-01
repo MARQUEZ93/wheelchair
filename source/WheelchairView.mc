@@ -35,6 +35,8 @@ class WheelchairView extends WatchUi.WatchFace {
     private var minMaxTemp;
     private var remainingDays;
 
+    private var pushDesign;
+
     function initialize() {
         WatchFace.initialize();
         load(); //read settings
@@ -509,5 +511,7 @@ class WheelchairView extends WatchUi.WatchFace {
 
         minMaxTemp = Application.Properties.getValue("MinMaxTemp");
         remainingDays = Application.Properties.getValue("RemainingDays");
+
+        pushDesign = Application.Properties.getValue("PushDesign");
     }
 }

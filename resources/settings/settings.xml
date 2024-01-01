@@ -47,4 +47,8 @@
         </settingConfig>
     </setting>
 
+    <setting propertyKey="@Properties.PushDesign" title="@Strings.PushDesignTitle">
+        <settingConfig type="boolean"/>
+    </setting>
+
 </settings>

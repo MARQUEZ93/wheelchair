@@ -6,4 +6,5 @@
     <property id="TwentyFourTime" type="boolean">false</property>
     <property id="MinMaxTemp" type="boolean">false</property>
     <property id="RemainingDays" type="boolean">false</property>
+    <property id="PushDesign" type="boolean">false</property>
 </properties>
