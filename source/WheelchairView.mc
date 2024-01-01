@@ -24,6 +24,7 @@ class WheelchairView extends WatchUi.WatchFace {
     private var snowyImage;
     private var cloudyImage;
     private var thunderImage;
+    private var largePushImage;
     // configuration for different devices
     private var config;
     // settings
@@ -55,6 +56,7 @@ class WheelchairView extends WatchUi.WatchFace {
                 "forecastX" => -7,
                 "notificationsY" => -25,
                 "minMaxSize" => Graphics.FONT_TINY,
+                "pushDesignX" => 0,
             };
         } else {
             // 454*454 for venu3
@@ -70,6 +72,7 @@ class WheelchairView extends WatchUi.WatchFace {
                 "forecastX" => -5,
                 "notificationsY" => -5,
                 "minMaxSize" => Graphics.FONT_SMALL,
+                "pushDesignX" => 60,
             };
         }
     }
@@ -91,6 +94,8 @@ class WheelchairView extends WatchUi.WatchFace {
         snowyImage = Application.loadResource(Rez.Drawables.snow);
         cloudyImage = Application.loadResource(Rez.Drawables.cloudy);
         thunderImage = Application.loadResource(Rez.Drawables.thunder);
+        // large wheelchair icon
+        largePushImage = Application.loadResource(Rez.Drawables.largePushImage);
     }
     // Called when this View is brought to the foreground. Restore
     // the state of this View and prepare it to be shown. This includes
@@ -109,6 +114,8 @@ class WheelchairView extends WatchUi.WatchFace {
         drawBatteryBluetooth(dc);
         drawWeather(dc);
         drawNotifications(dc);
+        drawLine(dc);
+        drawPushDesign(dc);
     }
     // Called when this View is removed from the screen. Save the
     // state of this View here. This includes freeing resources from
@@ -133,15 +140,22 @@ class WheelchairView extends WatchUi.WatchFace {
         var date = DataProvider.getCurrentDate();
         var dateString = Lang.format("$1$ $2$ $3$", [date.day_of_week, date.month, date.day]);
         dc.setColor(Graphics.COLOR_LT_GRAY, Graphics.COLOR_TRANSPARENT);
+        var y = 72;
+        if (pushDesign){
+            y = 57;
+        }
         dc.drawText(
             screenWidth / 2,
-            72,
+            y,
             config.get("fontSize"),
             dateString,
             Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
         );
     }
     private function drawWeather(dc){
+        if (pushDesign){
+            return;
+        }
         if (minMaxTemp) {
             drawMinMaxTemperature(dc);
         } else {
@@ -286,7 +300,7 @@ class WheelchairView extends WatchUi.WatchFace {
         var batteryOffset = 63;
         var batteryText = battery.format("%d") + "\u0025";
         if (battery == 100) {
-            if (!remainingDays){
+            if (!remainingDays && !pushDesign){
                 batteryOffset = 43;
                 edgeCase = -10 + config.get("fullBatteryOffset");
                 if (batteryFontSize == Graphics.FONT_SMALL){
@@ -314,43 +328,7 @@ class WheelchairView extends WatchUi.WatchFace {
         var radius = screenWidth / 4;
         var x = screenWidth / 2 + radius * Math.cos(angle_rad) + edgeCase - batteryOffset;
         var y = screenHeight / 2 - radius * Math.sin(angle_rad);
-        dc.setPenWidth(2);
-        dc.setColor(
-            battery <= 20 ? Graphics.COLOR_DK_RED : Graphics.COLOR_GREEN,
-            Graphics.COLOR_TRANSPARENT
-        );
-        // Draw the outer rect
-        dc.drawRoundedRectangle(
-            x,
-            y,
-            width,
-            height,
-            2
-        );
-        // Draw the small + on the right
-        dc.drawLine(
-            x + width + 1,
-            y + 3,
-            x + width + 1,
-            y + height - 3
-        );
-        // Fill the rect based on current battery
-        dc.fillRectangle(
-            x + 1,
-            y,
-            (width - 2) * battery / 100,
-            height
-        );
-        // Adjust text position
-        var text_x = x + width + 13; // Shift text 5 units to the right of the battery rectangle
-        var text_y = y + height / 2 - 2; // Align the text vertically centered to the battery rectangle
-        dc.drawText(
-            text_x,
-            text_y,
-            batteryFontSize,
-            batteryText,
-            Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER // Left justify and vertically center
-        );
+
         // Draw the bluetooth to the right of the text
         // this x is an x without the edgeCase subtraction
         var bluetoothX = (screenWidth / 2 + radius * Math.cos(angle_rad)) + 90 + config.get("bluetoothX");
@@ -359,6 +337,89 @@ class WheelchairView extends WatchUi.WatchFace {
             y - 7,
             bluetoothImg
         );
+
+        if (pushDesign){
+            angle_deg = 180;
+            angle_rad = angle_deg * (Math.PI / 180);
+            radius = screenWidth / 4;
+            x = screenWidth / 2 + radius * Math.cos(angle_rad) - 70;
+            y = screenHeight / 2 - radius * Math.sin(angle_rad);
+            dc.setPenWidth(2);
+            dc.setColor(
+                battery <= 20 ? Graphics.COLOR_DK_RED : Graphics.COLOR_GREEN,
+                Graphics.COLOR_TRANSPARENT
+            );
+            // Draw the outer rect
+            dc.drawRoundedRectangle(
+                x,
+                y,
+                width,
+                height,
+                2
+            );
+            // Draw the small + on the right
+            dc.drawLine(
+                x + width + 1,
+                y + 3,
+                x + width + 1,
+                y + height - 3
+            );
+            // Fill the rect based on current battery
+            dc.fillRectangle(
+                x + 1,
+                y,
+                (width - 2) * battery / 100,
+                height
+            );
+            // Adjust text position
+            var text_x = x + width + 13; // Shift text 5 units to the right of the battery rectangle
+            var text_y = y + height / 2 - 2; // Align the text vertically centered to the battery rectangle
+            dc.drawText(
+                text_x,
+                text_y,
+                batteryFontSize,
+                batteryText,
+                Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER // Left justify and vertically center
+            );
+        } else {
+            dc.setPenWidth(2);
+            dc.setColor(
+                battery <= 20 ? Graphics.COLOR_DK_RED : Graphics.COLOR_GREEN,
+                Graphics.COLOR_TRANSPARENT
+            );
+            // Draw the outer rect
+            dc.drawRoundedRectangle(
+                x,
+                y,
+                width,
+                height,
+                2
+            );
+            // Draw the small + on the right
+            dc.drawLine(
+                x + width + 1,
+                y + 3,
+                x + width + 1,
+                y + height - 3
+            );
+            // Fill the rect based on current battery
+            dc.fillRectangle(
+                x + 1,
+                y,
+                (width - 2) * battery / 100,
+                height
+            );
+            // Adjust text position
+            var text_x = x + width + 13; // Shift text 5 units to the right of the battery rectangle
+            var text_y = y + height / 2 - 2; // Align the text vertically centered to the battery rectangle
+            dc.drawText(
+                text_x,
+                text_y,
+                batteryFontSize,
+                batteryText,
+                Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER // Left justify and vertically center
+            );
+        }
     }
     private function drawTime(dc) {
         var clockTime = DataProvider.getCurrentTime();
@@ -377,16 +438,29 @@ class WheelchairView extends WatchUi.WatchFace {
             }
         }
         var timeString = Lang.format("$1$:$2$", [displayHour.format("%d"), clockTime.min.format("%02d")]);
-        var x = screenWidth / 2; // Centered horizontally
-        var y = screenHeight / 2 + 20;
-        dc.setColor(Graphics.COLOR_LT_GRAY, Graphics.COLOR_TRANSPARENT);
-        dc.drawText(
-            x,
-            y,
-            Graphics.FONT_NUMBER_THAI_HOT,
-            timeString,
-            Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
-        );
+        if (pushDesign){
+            var x = screenWidth / 2; // Centered horizontally
+            var y = screenHeight / 2 - 80;
+            dc.setColor(Graphics.COLOR_LT_GRAY, Graphics.COLOR_TRANSPARENT);
+            dc.drawText(
+                x,
+                y,
+                Graphics.FONT_NUMBER_MEDIUM,
+                timeString,
+                Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
+            );
+        } else {
+            var x = screenWidth / 2; // Centered horizontally
+            var y = screenHeight / 2 + 20;
+            dc.setColor(Graphics.COLOR_LT_GRAY, Graphics.COLOR_TRANSPARENT);
+            dc.drawText(
+                x,
+                y,
+                Graphics.FONT_NUMBER_THAI_HOT,
+                timeString,
+                Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
+            );
+        }
     }
     private function drawHeartRate(dc) {
         var imageWidth = heartImage.getWidth();
@@ -400,6 +474,10 @@ class WheelchairView extends WatchUi.WatchFace {
             (heartRate != null && heartRate > 120) ? Graphics.COLOR_DK_RED : Graphics.COLOR_LT_GRAY,
             Graphics.COLOR_TRANSPARENT
         );
+        if (pushDesign){
+            heartX = heartX - 30;
+            heartY = heartY - 35;
+        } 
         var x = heartX + imageWidth;
         var y = heartY + 20;
         var edgeCase = 0;
@@ -419,7 +497,50 @@ class WheelchairView extends WatchUi.WatchFace {
             Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER // Changed to center justify
         );
     }
+    private function drawPushDesign(dc){
+        if (!pushDesign){
+            return;
+        }
+        var pushes = DataProvider.getPushes();
+        var fontSize = config.get("fontSize");
+        if (pushes > 99999){
+            if (fontSize == Graphics.FONT_SMALL){
+                fontSize = Graphics.FONT_XTINY;
+            } else if (fontSize == Graphics.FONT_MEDIUM){
+                fontSize = Graphics.FONT_TINY;
+            }
+        }
+        pushes = 4111;
+        var pushesInK = pushes / 1000.0;
+        var formattedPushes = pushesInK.format("%.1f") + " K";
+        dc.setColor(
+            pushes > 5000 ? Graphics.COLOR_DK_GREEN : Graphics.COLOR_LT_GRAY,
+            Graphics.COLOR_TRANSPARENT
+        );
+        var angle_deg = 180;
+        var angle_rad = angle_deg * (Math.PI / 180);
+        var radius = screenWidth / 2;
+        var x = screenWidth / 2 + radius * Math.cos(angle_rad) + 215 + config.get("pushDesignX");
+        var y = screenHeight / 2 - radius * Math.sin(angle_rad) - 50;
+        // Draw the pushes image to the left of the text
+        dc.drawBitmap(
+            x, 
+            y,
+            largePushImage
+        );
+        dc.drawText(
+            x + 60,
+            y + 150,
+            fontSize,
+            formattedPushes,
+            Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
+        );
+
+    }
     private function drawPushes(dc) {
+        if (pushDesign){
+            return;
+        }
         var pushes = DataProvider.getPushes();
         var edgeCase = 0;
         var pushImageEdgeCase = 0;
@@ -441,7 +562,7 @@ class WheelchairView extends WatchUi.WatchFace {
             formattedPushes = pushesInK.format("%.1f") + " K";
         }
         dc.setColor(
-            pushes > 10000 ? Graphics.COLOR_DK_GREEN : Graphics.COLOR_LT_GRAY,
+            pushes > 5000 ? Graphics.COLOR_DK_GREEN : Graphics.COLOR_LT_GRAY,
             Graphics.COLOR_TRANSPARENT
         );
         var angle_deg = 225; // 2:45 PM, symmetrical to 225 degrees for heart
@@ -463,6 +584,15 @@ class WheelchairView extends WatchUi.WatchFace {
             formattedPushes,
             Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
         );
+    }
+
+    private function drawLine(dc){
+        if (!pushDesign){
+            return;
+        }
+        var x = screenWidth / 2; // Centered horizontally
+        var y = screenHeight / 2;
+        dc.drawLine(x, y-40, x, y+120); 
     }
 
     private function drawNotifications(dc) {
