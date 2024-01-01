@@ -32,7 +32,6 @@ class WheelchairView extends WatchUi.WatchFace {
     private var showNotifications;
     private var celsius;
     private var twentyFourTime;
-
     private var minMaxTemp;
     private var remainingDays;
 
@@ -141,9 +140,9 @@ class WheelchairView extends WatchUi.WatchFace {
         );
     }
     private function drawWeather(dc){
-        if (minMaxTemp){
+        if (minMaxTemp) {
             drawMinMaxTemperature(dc);
-        } else{
+        } else {
             drawForecast(dc);
             drawTemperature(dc);
         }
