@@ -57,6 +57,7 @@ class WheelchairView extends WatchUi.WatchFace {
                 "notificationsY" => -25,
                 "minMaxSize" => Graphics.FONT_TINY,
                 "pushDesignX" => 0,
+                "pushDesignY" => 0,
             };
         } else {
             // 454*454 for venu3
@@ -73,6 +74,7 @@ class WheelchairView extends WatchUi.WatchFace {
                 "notificationsY" => -5,
                 "minMaxSize" => Graphics.FONT_SMALL,
                 "pushDesignX" => 60,
+                "pushDesignY" => 10,
             };
         }
     }
@@ -142,7 +144,7 @@ class WheelchairView extends WatchUi.WatchFace {
         dc.setColor(Graphics.COLOR_LT_GRAY, Graphics.COLOR_TRANSPARENT);
         var y = 72;
         if (pushDesign){
-            y = 57;
+            y = 57 + config.get("pushDesignY");
         }
         dc.drawText(
             screenWidth / 2,
@@ -440,7 +442,7 @@ class WheelchairView extends WatchUi.WatchFace {
         var timeString = Lang.format("$1$:$2$", [displayHour.format("%d"), clockTime.min.format("%02d")]);
         if (pushDesign){
             var x = screenWidth / 2; // Centered horizontally
-            var y = screenHeight / 2 - 80;
+            var y = screenHeight / 2 - 80 - config.get("pushDesignY");
             dc.setColor(Graphics.COLOR_LT_GRAY, Graphics.COLOR_TRANSPARENT);
             dc.drawText(
                 x,
