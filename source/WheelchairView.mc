@@ -58,6 +58,7 @@ class WheelchairView extends WatchUi.WatchFace {
                 "minMaxSize" => Graphics.FONT_TINY,
                 "pushDesignX" => 0,
                 "pushDesignY" => 0,
+                "pushDesignLineLength" => 0,
             };
         } else {
             // 454*454 for venu3
@@ -73,8 +74,9 @@ class WheelchairView extends WatchUi.WatchFace {
                 "forecastX" => -5,
                 "notificationsY" => -5,
                 "minMaxSize" => Graphics.FONT_SMALL,
-                "pushDesignX" => 60,
+                "pushDesignX" => 55,
                 "pushDesignY" => 10,
+                "pushDesignLineLength" => 5,
             };
         }
     }
@@ -512,7 +514,6 @@ class WheelchairView extends WatchUi.WatchFace {
                 fontSize = Graphics.FONT_TINY;
             }
         }
-        pushes = 4111;
         var pushesInK = pushes / 1000.0;
         var formattedPushes = pushesInK.format("%.1f") + " K";
         dc.setColor(
@@ -523,7 +524,7 @@ class WheelchairView extends WatchUi.WatchFace {
         var angle_rad = angle_deg * (Math.PI / 180);
         var radius = screenWidth / 2;
         var x = screenWidth / 2 + radius * Math.cos(angle_rad) + 215 + config.get("pushDesignX");
-        var y = screenHeight / 2 - radius * Math.sin(angle_rad) - 50;
+        var y = screenHeight / 2 - radius * Math.sin(angle_rad) - 40;
         // Draw the pushes image to the left of the text
         dc.drawBitmap(
             x, 
@@ -531,7 +532,7 @@ class WheelchairView extends WatchUi.WatchFace {
             largePushImage
         );
         dc.drawText(
-            x + 60,
+            x + 55,
             y + 150,
             fontSize,
             formattedPushes,
@@ -594,7 +595,11 @@ class WheelchairView extends WatchUi.WatchFace {
         }
         var x = screenWidth / 2; // Centered horizontally
         var y = screenHeight / 2;
-        dc.drawLine(x, y-40, x, y+120); 
+        dc.setColor(
+                Graphics.COLOR_LT_GRAY,
+                Graphics.COLOR_TRANSPARENT
+        );
+        dc.drawLine(x, y-(40+config.get("pushDesignLineLength")), x, y+130+config.get("pushDesignLineLength")); 
     }
 
     private function drawNotifications(dc) {
