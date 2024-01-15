@@ -442,6 +442,11 @@ class WheelchairView extends WatchUi.WatchFace {
             }
         }
         var timeString = Lang.format("$1$:$2$", [displayHour.format("%d"), clockTime.min.format("%02d")]);
+        if (twentyFourTime){
+            if (displayHour < 10){
+                timeString = "0" + timeString;
+            } 
+        }
         if (pushDesign){
             var x = screenWidth / 2; // Centered horizontally
             var y = screenHeight / 2 - 80 - config.get("pushDesignY");
